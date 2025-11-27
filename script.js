@@ -242,6 +242,42 @@ document.addEventListener('DOMContentLoaded', () => {
             heroTitle.style.transform = `scale(${Math.max(0.8, scale)})`;
         }
 
+        // Fade animations for section titles and subtitles
+        const sections = [
+            { selector: '.waves-header', offset: 0.7 },
+            { selector: '.emotions-header', offset: 0.7 },
+            { selector: '#regulation-explanation', offset: 0.7 },
+            { selector: '#regulation-practice', offset: 0.7 },
+            { selector: '#practice-emotions', offset: 0.7 }
+        ];
+
+        sections.forEach(({ selector, offset }) => {
+            const section = document.querySelector(selector);
+            if (section) {
+                const rect = section.getBoundingClientRect();
+                const sectionTop = rect.top;
+                const sectionBottom = rect.bottom;
+                const windowHeight = window.innerHeight;
+
+                // Fade in when entering viewport
+                if (sectionTop < windowHeight * offset && sectionBottom > 0) {
+                    const fadeInProgress = Math.min(1, (windowHeight * offset - sectionTop) / 200);
+                    section.style.opacity = fadeInProgress;
+                    section.style.transform = `translateY(${20 * (1 - fadeInProgress)}px)`;
+                }
+                // Fade out when leaving viewport (scrolling past)
+                else if (sectionBottom < windowHeight * 0.3) {
+                    const fadeOutProgress = Math.max(0, sectionBottom / (windowHeight * 0.3));
+                    section.style.opacity = fadeOutProgress;
+                }
+                // Reset when not in view yet
+                else if (sectionTop > windowHeight) {
+                    section.style.opacity = 0;
+                    section.style.transform = 'translateY(20px)';
+                }
+            }
+        });
+
         // Path Drawing Logic
         const revealOffset = windowHeight * 0.6; // Trigger earlier
         const relativeScroll = currentScroll + revealOffset - gardenTop;
@@ -440,6 +476,42 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     handleScroll();
+
+    // Circles Grid Interaction
+    const circles = document.querySelectorAll('.circle');
+    const circlesText = document.querySelector('.circles-text');
+    const circlesTextBelow = document.querySelector('.circles-text-below');
+
+    function updateCirclesText() {
+        const poppedCount = document.querySelectorAll('.circle.popped').length;
+        const totalCircles = circles.length;
+
+        if (poppedCount === totalCircles) {
+            // Hide top text, show bottom text
+            circlesText.style.opacity = '0';
+            circlesTextBelow.style.opacity = '1';
+        } else {
+            // Show top text, hide bottom text
+            circlesText.style.opacity = '1';
+            circlesTextBelow.style.opacity = '0';
+        }
+    }
+
+    circles.forEach(circle => {
+        circle.addEventListener('click', () => {
+            if (circle.classList.contains('popped') || circle.classList.contains('exploding')) return;
+
+            // Add exploding class to trigger animation
+            circle.classList.add('exploding');
+
+            // Wait for explosion animation to finish (400ms)
+            setTimeout(() => {
+                circle.classList.remove('exploding');
+                circle.classList.add('popped');
+                updateCirclesText(); // Update text after popping
+            }, 380); // Slightly less than 400ms to ensure smooth transition
+        });
+    });
 
     // Play Button Scroll Logic
     const playBtn = document.querySelector('.hero-play-btn');

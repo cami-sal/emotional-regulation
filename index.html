@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blooming Scroll</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="audio-control" class="audio-control">
+        <span class="icon">♫</span>
+        <span class="text">Play Music</span>
+    </div>
+    <a href="#regulation-explanation" class="skip-btn">Skip to regulation tools</a>
+    <iframe id="sc-player" width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay"
+        src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/relaxingmusicok/lost-in-clouds-paul-landry&color=%23ff5500&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=false&loop=true"
+        style="display: none;">
+    </iframe>
+
+    <div class="scroll-container">
+        <div class="hero">
+
+            <div class="hero-content">
+                <h1>The Journey to<br>Emotional Regulation</h1>
+                <p class="hero-subtitle">감정 조절을 향한 여정</p>
+                <!-- Hero Images -->
+                <!-- Hero Frame -->
+                <img src="flower graphs/hero/herogreenline.png" class="hero-img hero-green-line" alt="Hero Green Line">
+                <img src="flower graphs/hero/heroflower2.png" class="hero-img hero-flower-2" alt="Hero Flower 2">
+                <img src="flower graphs/hero/heroflower.png" class="hero-img hero-flower-overlay" alt="Hero Flower">
+                <img src="flower graphs/hero/heroline1.png" class="hero-img hero-line1" alt="Hero Line 1">
+
+                <!-- Play Button -->
+                <img src="flower graphs/hero/play button.png" class="hero-img hero-play-btn" alt="Play Button">
+
+                <!-- Play Button Effects (Hover) -->
+                <img src="flower graphs/hero/play effect1.png" class="hero-img play-effect effect-1"
+                    alt="Play Effect 1">
+                <img src="flower graphs/hero/play effect2.png" class="hero-img play-effect effect-2"
+                    alt="Play Effect 2">
+                <img src="flower graphs/hero/play effect3.png" class="hero-img play-effect effect-3"
+                    alt="Play Effect 3">
+            </div>
+        </div>
+        <div class="scroll-text">
+            <span class="word" data-speed="1">Growth</span>
+            <span class="word" data-speed="1.2">is</span>
+            <span class="word" data-speed="0.8">not</span>
+            <span class="word" data-speed="1.1">straight</span>
+        </div>
+        <div id="growth-is-not-linear">
+        </div>
+        <div class="spacer"></div>
+
+        <section id="sound-waves">
+            <header class="waves-header">
+                <h1>Everyone's journey is different</h1>
+                <p>모든 사람의 여정은 서로 다릅니다</p>
+            </header>
+            <canvas id="waveCanvas"></canvas>
+        </section>
+
+        <section id="emotions">
+            <header class="emotions-header">
+                <h1>And neither are our emotions</h1>
+                <p class="emotions-subtitle">우리의 감정도 마찬가지입니다</p>
+            </header>
+            <div id="squares-gallery">
+                <div class="opacity-squares">
+                    <div class="squares-row">
+                        <div class="square square-yellow" style="opacity: 0.2;"></div>
+                        <div class="square square-yellow" style="opacity: 0.36;"></div>
+                        <div class="square square-yellow" style="opacity: 0.52;"></div>
+                        <div class="square square-yellow" style="opacity: 0.68;"></div>
+                        <div class="square square-yellow" style="opacity: 0.84;"></div>
+                        <div class="square square-yellow" style="opacity: 1;"></div>
+                    </div>
+                    <p class="row-text">some days will be splendid</p>
+                </div>
+                <div class="opacity-squares">
+                    <div class="squares-row">
+                        <div class="square square-blue" style="opacity: 0.2;"></div>
+                        <div class="square square-blue" style="opacity: 0.36;"></div>
+                        <div class="square square-blue" style="opacity: 0.52;"></div>
+                        <div class="square square-blue" style="opacity: 0.68;"></div>
+                        <div class="square square-blue" style="opacity: 0.84;"></div>
+                        <div class="square square-blue" style="opacity: 1;"></div>
+                    </div>
+                    <p class="row-text">some days will be sorrowfull</p>
+                </div>
+                <div class="opacity-squares">
+                    <div class="squares-row">
+                        <div class="square square-red" style="opacity: 0.2;"></div>
+                        <div class="square square-red" style="opacity: 0.36;"></div>
+                        <div class="square square-red" style="opacity: 0.52;"></div>
+                        <div class="square square-red" style="opacity: 0.68;"></div>
+                        <div class="square square-red" style="opacity: 0.84;"></div>
+                        <div class="square square-red" style="opacity: 1;"></div>
+                    </div>
+                    <p class="row-text">some days will be stressfull</p>
+                </div>
+                <div class="opacity-squares">
+                    <div class="squares-row">
+                        <div class="square square-green" style="opacity: 0.2;"></div>
+                        <div class="square square-green" style="opacity: 0.36;"></div>
+                        <div class="square square-green" style="opacity: 0.52;"></div>
+                        <div class="square square-green" style="opacity: 0.68;"></div>
+                        <div class="square square-green" style="opacity: 0.84;"></div>
+                        <div class="square square-green" style="opacity: 1;"></div>
+                    </div>
+                    <p class="row-text">some days will be satisfying</p>
+                </div>
+                <div class="opacity-squares">
+                    <div class="squares-row">
+                        <div class="square square-blue" style="opacity: 1;"></div>
+                        <div class="square square-green" style="opacity: 0.46;"></div>
+                        <div class="square square-blue" style="opacity: 0.82;"></div>
+                        <div class="square square-green" style="opacity: 0.28;"></div>
+                        <div class="square square-red" style="opacity: 0.64;"></div>
+                        <div class="square square-yellow" style="opacity: 0.1;"></div>
+                    </div>
+                    <p class="row-text">most are a mix of everything</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="regulation-explanation">
+            <div class="regulation-content">
+                <p>Emotional regulation is not about suppressing or ceasing to feel emotions. It is about managing how
+                    we react to them and what we do with the information they provide.</p>
+            </div>
+        </section>
+
+        <section id="circles-grid">
+            <div class="grid-container">
+                <!-- Row 1 -->
+                <div class="circle circle-yellow"></div>
+                <div class="circle circle-lightblue"></div>
+                <div class="circle circle-pink"></div>
+                <div class="circle circle-green"></div>
+                <!-- Row 2 -->
+                <div class="circle circle-lightgreen"></div>
+                <div class="circle circle-red"></div>
+                <div class="circle circle-orange"></div>
+                <div class="circle circle-blue"></div>
+                <!-- Row 3 -->
+                <div class="circle circle-purple"></div>
+                <div class="circle circle-yellow"></div>
+                <div class="circle circle-lightblue"></div>
+                <div class="circle circle-red"></div>
+                <!-- Row 4 -->
+                <div class="circle circle-pink"></div>
+                <div class="circle circle-green"></div>
+                <div class="circle circle-orange"></div>
+                <div class="circle circle-purple"></div>
+            </div>
+        </section>
+    </div>
+    <script src="script.js"></script>
+    <script src="waves.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Capa_2" data-name="Capa 2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 367 1130.63">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: url(#Degradado_sin_nombre_1366);
+      }
+
+      .cls-2 {
+        fill: none;
+        filter: url(#outer-glow-1);
+        stroke: url(#Degradado_sin_nombre_850);
+        stroke-linecap: round;
+        stroke-miterlimit: 10;
+        stroke-width: 10px;
+      }
+    </style>
+    <linearGradient id="Degradado_sin_nombre_850" data-name="Degradado sin nombre 850" x1="-35.16" y1="278.74" x2="1064.71" y2="278.74" gradientTransform="translate(462.44 50.81) rotate(90)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#bdeaa3"/>
+      <stop offset=".12" stop-color="#9ad9e0"/>
+      <stop offset=".35" stop-color="#fdf4a0"/>
+      <stop offset=".58" stop-color="#eeaa42"/>
+      <stop offset=".81" stop-color="#eba0ad"/>
+      <stop offset="1" stop-color="#ad8cb9"/>
+    </linearGradient>
+    <filter id="outer-glow-1" x="0" y=".63" width="367" height="1130" filterUnits="userSpaceOnUse">
+      <feOffset dx="0" dy="0"/>
+      <feGaussianBlur result="blur" stdDeviation="5"/>
+      <feFlood flood-color="#fff" flood-opacity=".5"/>
+      <feComposite in2="blur" operator="in"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <radialGradient id="Degradado_sin_nombre_1366" data-name="Degradado sin nombre 1366" cx="183.71" cy="20.65" fx="183.71" fy="20.65" r="20.65" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#9ad9e0"/>
+      <stop offset=".27" stop-color="#9cdadc"/>
+      <stop offset=".52" stop-color="#a2ddd0"/>
+      <stop offset=".76" stop-color="#ade2be"/>
+      <stop offset="1" stop-color="#bce9a3"/>
+      <stop offset="1" stop-color="#bdeaa3"/>
+    </radialGradient>
+  </defs>
+  <g id="Capa_2-2" data-name="Capa 2">
+    <path class="cls-2" d="M183.71,20.65c98.02,67.38,108.15,166.55-62.17,72.5C33.72,44.66-20.73,275.38,75.89,244.3c22.22-7.15,68.38-25.84,84.44,6.75,20.75,42.11-50.84,53.85-59.71,79.67-22.74,66.18,101,22.34,118.21,75.51,22.13,68.36-35.51,129.37-61.15,128.41-32.2-1.2-63.97-27.44-96.52-19.08-45.4,11.66-51.57,105.11-24.09,148.09,43.92,68.69,150.15,42.23,178.34-17.41,46.17-97.66,132.21-52.33,131.41-7.42-1.89,105.8-181.34,116.65-185.47,210.91-3.81,86.93,103.6-2.09,112.61,55.5,6.85,43.76-58.67,77.75-58.67,140.03,0,36.47,21.69,91.83,94.72,50.67"/>
+    <circle class="cls-1" cx="183.71" cy="20.65" r="20.65"/>
+  </g>
+</svg>

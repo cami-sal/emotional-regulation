@@ -1,0 +1,715 @@
+:root {
+    --bg-color-start: #0f172a;
+    --bg-color-end: #000000;
+    --text-color: #f8fafc;
+    --accent-color: #e2e8f0;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #faf9f5;
+    /* Light whitish color */
+    color: #2c2c2c;
+    /* Dark text for contrast */
+    font-family: 'Gowun Dodum', sans-serif;
+    overflow-x: hidden;
+    overflow-y: auto;
+    min-height: 100vh;
+}
+
+.scroll-container {
+    position: relative;
+    width: 100%;
+}
+
+.scroll-text {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+}
+
+.hero {
+    position: relative;
+    /* Takes up space in flow */
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 20;
+    background-color: #faf9f5;
+    /* Match body background */
+    background-image: url('flower graphs/hero/header.png');
+    background-size: contain;
+    /* Ensure full image is visible */
+    background-position: top center;
+    background-repeat: no-repeat;
+}
+
+.hero-content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform-origin: center center;
+    /* Ensure scaling happens from center */
+}
+
+.hero h1 {
+    font-size: 5rem;
+    /* Large size */
+    font-weight: 700;
+    text-align: center;
+    /* Center the two lines */
+    color: #3c4b5f;
+    margin: 0;
+    padding: 0 20px;
+    line-height: 1.2;
+    /* Good spacing for two lines */
+    /* opacity: 1;  Removed individual opacity transition */
+    /* transition: opacity 0.5s ease; Removed individual opacity transition */
+    z-index: 2;
+}
+
+.hero-subtitle {
+    font-size: 2rem;
+    font-weight: 400;
+    color: #64748b;
+    margin-top: 1rem;
+    text-align: center;
+    z-index: 2;
+    position: absolute;
+    top: 60%;
+    /* Position below the title */
+}
+
+/* ... existing styles ... */
+
+.hero-green-line {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 2;
+    opacity: 0;
+    animation: fadeIn 2s ease-out forwards;
+}
+
+.word {
+    position: absolute;
+    font-size: 5rem;
+    font-weight: 700;
+    color: #3c4b5f;
+    /* Updated text color */
+    opacity: 0;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    /* Subtle shadow */
+    left: 50%;
+    /* Center horizontally */
+    z-index: 10;
+}
+
+/* Alternating slide directions */
+.word:nth-child(odd) {
+    transform: translateX(-50%) translateX(-100px) translateY(20px);
+}
+
+.word:nth-child(even) {
+    transform: translateX(-50%) translateX(100px) translateY(20px);
+}
+
+.word.visible {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+#growth-is-not-linear {
+    position: absolute;
+    top: 100vh;
+    /* Start after the hero section */
+    left: 0;
+    width: 100%;
+    /* Height will be set by JS to match aspect ratio */
+    pointer-events: none;
+    z-index: 1;
+    will-change: transform;
+    /* Progressive Reveal Variable (inherited by pseudo-element) */
+    --reveal: 0%;
+}
+
+/* Play Button Effects */
+.play-effect {
+    position: absolute;
+    bottom: 15%;
+    /* Match play button position */
+    left: 50%;
+    /* Center vertically relative to button:
+       Button height: 80px (center at 40px from bottom)
+       Effect height: 120px (center at 60px from bottom)
+       Difference: 20px down to align centers.
+    */
+    transform: translate(-50%, 20px) scale(0.5);
+    width: 120px;
+    height: 120px;
+    z-index: 4;
+    /* Behind button (5) */
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    object-fit: contain;
+    /* Prevent distortion */
+}
+
+/* Hover State - Burst in different directions */
+.hero-play-btn:hover~.play-effect {
+    opacity: 1;
+}
+
+/* Effect 1: Bottom-Right Burst circle*/
+.hero-play-btn:hover~.effect-1 {
+    transition-delay: 0s;
+    transform: translate(-20%, 90px) scale(0.6) rotate(0deg);
+}
+
+/* Effect 2: Top-Right Burst fan*/
+.hero-play-btn:hover~.effect-2 {
+    transition-delay: 0;
+    transform: translate(-50%, 15px) scale(0.9) rotate(-20deg);
+}
+
+/* Effect 3: Bottom-Left Burst leaf*/
+.hero-play-btn:hover~.effect-3 {
+    transition-delay: 0;
+    transform: translate(-100%, 100px) scale(1.2) rotate(0deg);
+}
+
+.base-path {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: auto;
+    opacity: 1;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.flower {
+    position: absolute;
+    width: 200px;
+    /* Bigger size */
+    height: 200px;
+    transition: opacity 0.4s ease, transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    opacity: 0;
+    transform: scale(0);
+    /* Center the flower on its coordinate */
+    margin-left: -100px;
+    /* Center based on new size */
+    margin-top: -100px;
+    z-index: 5;
+    /* Ensure above garden background */
+}
+
+.flower.bloomed {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Big Pink Flower - larger size */
+.flower.bigpink {
+    width: 300px;
+    height: 300px;
+    margin-left: -150px;
+    margin-top: -150px;
+}
+
+/* Animation Classes */
+.flower.rotate.bloomed {
+    transform: scale(1) rotate(var(--rotation));
+}
+
+.flower.pulse.bloomed {
+    animation: pulse 2s infinite ease-in-out;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Image Styling */
+.flower img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
+}
+
+.leaf {
+    position: absolute;
+    width: 120px;
+    /* Smaller than flowers */
+    height: 120px;
+    transition: opacity 0.4s ease, transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    opacity: 0;
+    transform: scale(0);
+    margin-left: -60px;
+    margin-top: -60px;
+    z-index: 4;
+    /* Below flowers (5) but above garden (1) */
+}
+
+.leaf.bloomed {
+    opacity: 1;
+    transform: scale(1) rotate(var(--rotation));
+}
+
+.leaf img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 3px 10px rgba(0, 0, 0, 0.2));
+}
+
+.spacer {
+    height: 400vh;
+    /* Control scroll speed/length */
+    width: 1px;
+    position: relative;
+    z-index: 0;
+}
+
+/* Sound Waves Section */
+#sound-waves {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    /* Full screen height */
+    background-color: #faf9f5;
+    /* Match body background */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 20;
+    /* Ensure above garden */
+    margin-top: 300px;
+    /* Spacing from garden */
+}
+
+.waves-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.waves-header h1 {
+    font-size: 5rem;
+    color: #1a1a1a;
+    margin: 0;
+}
+
+.waves-header p {
+    font-size: 2rem;
+    color: #666;
+    margin-top: 0.5rem;
+}
+
+canvas {
+    width: 100%;
+    height: 60vh;
+}
+
+/* Emotions Section */
+#emotions {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    background-color: #faf9f5;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 20;
+    margin-top: 100px;
+    padding: 50px 20px;
+}
+
+.emotions-header {
+    text-align: center;
+    margin-bottom: 6rem;
+    /* Increased from 2rem to push squares away */
+}
+
+.emotions-header h1 {
+    font-size: 5rem;
+    color: #1a1a1a;
+    margin: 0;
+    margin-bottom: 0.5rem;
+    /* Reduced from 3rem to bring subtitle closer */
+}
+
+.emotions-subtitle {
+    font-size: 2rem;
+    font-weight: 400;
+    color: #64748b;
+    margin: 0;
+    /* Removed margin-top to bring closer to title */
+    text-align: center;
+}
+
+.opacity-squares {
+    position: relative;
+    /* For absolute positioning of text */
+    display: flex;
+    flex-direction: column;
+    /* Stack squares and text vertically */
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 15px;
+    /* Air between rows */
+}
+
+.squares-row {
+    display: flex;
+    gap: 8px;
+    /* Air between squares */
+    justify-content: center;
+    align-items: center;
+}
+
+.row-text {
+    margin: 0;
+    margin-top: 8px;
+    /* Reduced from 10px (10% reduction) */
+    /* Space between squares and text */
+    font-size: 1.4rem;
+    /* Reduced from 2rem (30% reduction) */
+    font-weight: 500;
+    color: #3c4b5f;
+    /* Dark grey/blue for contrast */
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+    /* Improve readability */
+    white-space: nowrap;
+    transition: opacity 0.3s ease;
+    /* Smooth text fade */
+}
+
+.opacity-squares:last-child {
+    margin-bottom: 0;
+    /* No margin on last row */
+}
+
+.square {
+    width: 100px;
+    height: 100px;
+    border-radius: 12px;
+    /* Rounded corners */
+    transition: background-color 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+        transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    /* Dynamic bounce transition */
+}
+
+.square-yellow {
+    background-color: #e4c353;
+    /* Yellow from waves */
+}
+
+.square-blue {
+    background-color: #4a9dcd;
+    /* Blue from waves */
+}
+
+.square-red {
+    background-color: #c86056;
+    /* Red from waves */
+}
+
+.square-green {
+    background-color: #6db5a0;
+    /* Green from waves */
+}
+
+.square-purple {
+    background-color: #ad88b9;
+    /* Purple from waves */
+}
+
+/* Circles Grid Section */
+#circles-grid {
+    position: relative;
+    width: 100%;
+    min-height: 80vh;
+    background-color: #faf9f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 100px 20px;
+    z-index: 20;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    /* 4 columns */
+    width: 600px;
+    /* Fixed width for grid */
+    height: 600px;
+    /* Fixed height for grid */
+    place-items: center;
+    /* Center items in their cells */
+}
+
+.circle {
+    width: 210px;
+    /* Increased size for >25% overlap (210px vs 150px cell) */
+    height: 210px;
+    border-radius: 50%;
+    mix-blend-mode: multiply;
+    /* Blend colors where they overlap */
+    opacity: 0.8;
+    /* Slightly transparent */
+    transition: transform 0.5s ease;
+    /* Removed negative margins */
+}
+
+/* Removed margin reset rules as they are no longer needed */
+
+.circle-yellow {
+    background-color: #e4c353;
+}
+
+.circle-blue {
+    background-color: #4a9dcd;
+}
+
+.circle-red {
+    background-color: #c86056;
+}
+
+.circle-green {
+    background-color: #6db5a0;
+}
+
+.circle-purple {
+    background-color: #ad88b9;
+}
+
+.circle-pink {
+    background-color: #eb8aad;
+}
+
+.circle-orange {
+    background-color: #eeaa42;
+}
+
+.circle-lightblue {
+    background-color: #9ad9e0;
+}
+
+.circle-lightgreen {
+    background-color: #bdeaa3;
+}
+
+/* Hover effect */
+.circle:hover {
+    transform: scale(1.1);
+    z-index: 10;
+}
+
+/* Regulation Explanation Section */
+#regulation-explanation {
+    position: relative;
+    width: 100%;
+    min-height: 60vh;
+    background-color: #faf9f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 100px 20px;
+    z-index: 20;
+}
+
+/* Audio Control */
+.audio-control {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    /* Moved to left */
+    right: auto;
+    z-index: 9999;
+    /* Ensure always on top */
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(5px);
+    padding: 10px 20px;
+    border-radius: 30px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    font-family: "Outfit", sans-serif;
+    color: #3c4b5f;
+}
+
+.audio-control:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+}
+
+.audio-control .icon {
+    font-size: 1.2rem;
+}
+
+/* Skip Button */
+.skip-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    /* Ensure always on top */
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(5px);
+    color: #3c4b5f;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-family: "Outfit", sans-serif;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.skip-btn:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+}
+
+.regulation-content {
+    max-width: 900px;
+    text-align: center;
+}
+
+.regulation-content p {
+    font-size: 2.5rem;
+    line-height: 1.6;
+    color: #3c4b5f;
+    margin: 0;
+    font-weight: 400;
+}
+
+/* Hero Images Positioning */
+.hero-img {
+    position: absolute;
+    pointer-events: none;
+    z-index: 1;
+}
+
+
+
+.hero-flower-2 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 3;
+    pointer-events: none;
+    opacity: 0;
+    animation: fadeIn 2s ease-out forwards, float 6s ease-in-out infinite;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0) rotate(0deg) scale(1);
+    }
+
+    50% {
+        transform: translateY(-15px) rotate(4deg) scale(1.02);
+    }
+}
+
+.hero-flower-overlay {
+    bottom: 23%;
+    left: 4%;
+    width: 7%;
+    height: auto;
+    z-index: 4;
+    opacity: 0;
+    animation: fadeIn 2s ease-out forwards, float 6s ease-in-out infinite;
+    animation-delay: 0.5s;
+    /* Slight delay for the second flower */
+}
+
+.hero-line1 {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 4;
+    animation: fadeIn 2s ease-out forwards;
+    opacity: 0;
+}
+
+
+
+/* Play Button */
+.hero-play-btn {
+    bottom: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 80px;
+    z-index: 5;
+    /* Above text/lines */
+    cursor: pointer;
+    pointer-events: auto;
+    /* Allow clicking */
+    transition: transform 0.3s ease;
+}
+
+.hero-play-btn:hover {
+    transform: translateX(-50%) scale(1.1);
+}

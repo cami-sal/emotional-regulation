@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sound Waves</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            overflow: hidden;
+            /* No scrolling on this page */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        canvas {
+            width: 100%;
+            height: 60vh;
+        }
+
+        .nav-link {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            color: var(--accent-color);
+            text-decoration: none;
+            font-size: 1.2rem;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+            z-index: 100;
+        }
+
+        .nav-link:hover {
+            opacity: 1;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="index.html" class="nav-link">← Back to Garden</a>
+    <header class="hero" style="height: auto; position: relative; margin-bottom: 2rem;">
+        <h1>Visual Frequencies</h1>
+        <p>Listen with your eyes.</p>
+    </header>
+    <canvas id="waveCanvas"></canvas>
+    <script src="waves.js"></script>
+</body>
+
+</html>

@@ -28,12 +28,18 @@
             <div class="hero-content">
                 <h1>The Journey to<br>Emotional Regulation</h1>
                 <p class="hero-subtitle">감정 조절을 향한 여정</p>
-                <!-- Hero Images -->
-                <!-- Hero Frame -->
-                <img src="flower graphs/hero/herogreenline.png" class="hero-img hero-green-line" alt="Hero Green Line">
-                <img src="flower graphs/hero/heroflower2.png" class="hero-img hero-flower-2" alt="Hero Flower 2">
-                <img src="flower graphs/hero/heroflower.png" class="hero-img hero-flower-overlay" alt="Hero Flower">
-                <img src="flower graphs/hero/heroline1.png" class="hero-img hero-line1" alt="Hero Line 1">
+
+                <!-- Wavy Line Background -->
+                <svg class="hero-wave" viewBox="0 0 1400 400" preserveAspectRatio="none">
+                    <defs>
+                        <linearGradient id="waveGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:#9ad9e0;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#bdeaa3;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M0,200 Q175,100 350,200 T700,200 T1050,200 T1400,200" stroke="url(#waveGradient)"
+                        stroke-width="200" fill="none" stroke-linecap="round" />
+                </svg>
 
                 <!-- Play Button -->
                 <img src="flower graphs/hero/play button.png" class="hero-img hero-play-btn" alt="Play Button">
@@ -47,16 +53,6 @@
                     alt="Play Effect 3">
             </div>
         </div>
-        <div class="scroll-text">
-            <span class="word" data-speed="1">Growth</span>
-            <span class="word" data-speed="1.2">is</span>
-            <span class="word" data-speed="0.8">not</span>
-            <span class="word" data-speed="1.1">straight</span>
-        </div>
-        <div id="growth-is-not-linear">
-        </div>
-        <div class="spacer"></div>
-
         <section id="sound-waves">
             <header class="waves-header">
                 <h1>Everyone's journey is different</h1>
@@ -64,6 +60,17 @@
             </header>
             <canvas id="waveCanvas"></canvas>
         </section>
+        <div class="scroll-text">
+            <span class="word" data-speed="1">Growth</span>
+            <span class="word" data-speed="1.2">is</span>
+            <span class="word" data-speed="0.8">not</span>
+            <span class="word" data-speed="1.0">a</span>
+            <span class="word" data-speed="1.1">straight</span>
+            <span class="word" data-speed="1.0">line</span>
+        </div>
+        <div id="growth-is-not-linear">
+        </div>
+        <div class="spacer"></div>
 
         <section id="emotions">
             <header class="emotions-header">
@@ -160,12 +167,23 @@
                 <div class="circle circle-orange"></div>
                 <div class="circle circle-purple"></div>
             </div>
-            <h2 class="circles-text-below">Thoughts when you are <strong>observing</strong> them</h2>
+            <div class="observing-container">
+                <h2 class="circles-text-below">Thoughts when you are <strong>observing</strong> them</h2>
+                <button class="restart-circles-btn" aria-label="Restart interaction">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M1 4V10H7" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                        <path
+                            d="M3.51 15C4.135 16.945 5.43 18.575 7.165 19.655C8.9 20.735 10.95 21.18 12.95 20.91C14.95 20.64 16.76 19.675 18.04 18.195C19.32 16.715 19.98 14.82 19.9 12.85C19.82 10.88 19.005 9.045 17.605 7.675C16.205 6.305 14.315 5.49 12.275 5.385C10.235 5.28 8.19 5.89 6.51 7.1"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </button>
+            </div>
         </section>
 
         <section id="regulation-practice">
             <header class="regulation-practice-header">
-                <h1>You can observe your thoughts and emotions by practicing Emotional Regulation. Here is how:</h1>
+                <h1>You can observe your thoughts and emotions by practicing Emotional Regulation</h1>
             </header>
             <div class="gradient-circles-container">
                 <div class="gradient-circle gradient-circle-blue">
@@ -184,8 +202,106 @@
             <header class="practice-emotions-header">
                 <h1>Here, we will practice how to regulate our emotions in difficult situations</h1>
             </header>
+            <div class="problem-visualization">
+                <div class="blue-semicircle"></div>
+                <div class="yellow-circle-small"></div>
+                <p class="visualization-text">a problem upclose can feel overwhelming</p>
+            </div>
+        </section>
+
+        <section id="how-it-works">
+            <header class="how-it-works-header">
+                <h1>How does it work</h1>
+            </header>
+            <div class="how-it-works-content">
+                <div class="small-purple-circle"></div>
+                <p class="feeling-text">A feeling arises</p>
+                <p class="instruction-text">Touch the bubble</p>
+            </div>
+        </section>
+
+        <!-- Step 1: Observe Section -->
+        <section id="step-observe">
+            <header class="step-observe-header">
+                <h1>Step 1: Observe</h1>
+            </header>
+
+            <div class="observe-subsection">
+                <h2 class="subsection-title">What am I really feeling?</h2>
+                <div class="radar-container">
+                    <svg class="radar-svg" viewBox="0 0 400 400">
+                        <!-- Concentric circles -->
+                        <circle cx="200" cy="200" r="150" class="radar-circle" />
+                        <circle cx="200" cy="200" r="110" class="radar-circle" />
+                        <circle cx="200" cy="200" r="70" class="radar-circle" />
+                        <circle cx="200" cy="200" r="30" class="radar-circle" />
+
+                        <!-- Intersecting lines -->
+                        <line x1="200" y1="50" x2="200" y2="350" class="radar-line" />
+                        <line x1="50" y1="200" x2="350" y2="200" class="radar-line" />
+
+                        <!-- Rotating sweep line -->
+                        <line x1="200" y1="200" x2="200" y2="50" class="radar-sweep" />
+
+                        <!-- Radar blips (colored spots) -->
+                        <!-- 9 Blips total, bigger size (r=15) -->
+                        <circle cx="260" cy="120" r="15" class="radar-blip" />
+                        <circle cx="150" cy="180" r="15" class="radar-blip" />
+                        <circle cx="280" cy="250" r="15" class="radar-blip" />
+                        <circle cx="170" cy="290" r="15" class="radar-blip" />
+                        <circle cx="310" cy="200" r="15" class="radar-blip" />
+                        <circle cx="230" cy="160" r="15" class="radar-blip" />
+                        <circle cx="100" cy="100" r="15" class="radar-blip" />
+                        <circle cx="120" cy="250" r="15" class="radar-blip" />
+                        <circle cx="220" cy="300" r="15" class="radar-blip" />
+
+                        <!-- Center circle -->
+                        <circle cx="200" cy="200" r="8" class="radar-center" />
+                    </svg>
+                </div>
+                <p class="fade-text">To regulate our emotions we must understand them first</p>
+            </div>
+
+            <div class="observe-subsection-2">
+                <h2 class="subsection-title">Think about something that is currently troubling you<br>or has troubled
+                    you in the past</h2>
+
+                <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.8.5/dist/dotlottie-wc.js"
+                    type="module"></script>
+                <dotlottie-wc src="https://lottie.host/23ac0a26-4b5b-4df8-a8de-3c6b62ff4d39/fMaODBqBMf.lottie"
+                    style="width: 300px;height: 300px" autoplay loop></dotlottie-wc>
+
+                <div class="continue-container">
+                    <p class="continue-text">Take a few seconds to think and then continue</p>
+                    <button id="continue-btn" class="continue-btn">Continue</button>
+                </div>
+
+                <div id="emotions-options" class="hidden">
+                    <p class="question-text">Between this options, how does it make you feel</p>
+                    <div class="emotions-buttons">
+                        <button class="emotion-btn">Sad</button>
+                        <button class="emotion-btn">Embarrassed</button>
+                        <button class="emotion-btn">Anxious</button>
+                        <button class="emotion-btn">Angry</button>
+                        <button class="emotion-btn">Hurt</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sub-Emotion Detail Section -->
+        <section id="sub-emotion-section" class="hidden">
+            <div class="sub-emotion-content">
+                <h2 id="sub-emotion-subtitle" class="sub-emotion-subtitle"></h2>
+                <div class="circles-container">
+                    <canvas id="complex-wheel" class="emotion-circle" width="500" height="500"></canvas>
+                    <canvas id="simple-wheel" class="emotion-circle" width="500" height="500"></canvas>
+                </div>
+                <p class="circles-description">Once we name our emotions, we begin to truly feel them</p>
+            </div>
         </section>
     </div>
+    <div id="curtain"></div>
     <script src="script.js"></script>
     <script src="waves.js"></script>
 </body>

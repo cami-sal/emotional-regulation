@@ -13,7 +13,7 @@ window.addEventListener('resize', resize);
 resize();
 
 // Configuration
-const colors = ['#c86056', '#ad88b9', '#e4c353', '#4a9dcd', '#6db5a0'];
+const colors = ['#c86056', '#ad88b9', '#ffdb73', '#4a9dcd', '#6db5a0'];
 const baseFrequency = 0.01;
 const waves = [];
 

@@ -16,7 +16,7 @@ body {
     padding: 0;
     background-color: #faf9f5;
     /* Light whitish color */
-    color: #2c2c2c;
+    color: #3c4b5f;
     /* Dark text for contrast */
     font-family: 'Gowun Dodum', sans-serif;
     overflow-x: hidden;
@@ -36,7 +36,10 @@ body {
     width: 100%;
     height: 100%;
     z-index: 10;
+    pointer-events: none;
+    /* Prevent blocking clicks/selection */
 }
+
 
 .hero {
     position: relative;
@@ -48,12 +51,7 @@ body {
     align-items: center;
     z-index: 20;
     background-color: #faf9f5;
-    /* Match body background */
-    background-image: url('flower graphs/hero/header.png');
-    background-size: contain;
-    /* Ensure full image is visible */
-    background-position: top center;
-    background-repeat: no-repeat;
+    overflow: visible;
 }
 
 .hero-content {
@@ -65,6 +63,7 @@ body {
     align-items: center;
     transform-origin: center center;
     /* Ensure scaling happens from center */
+    overflow: visible;
 }
 
 .hero h1 {
@@ -86,13 +85,37 @@ body {
 .hero-subtitle {
     font-size: 2rem;
     font-weight: 400;
-    color: #64748b;
+    color: #3c4b5f;
     margin-top: 1rem;
     text-align: center;
     z-index: 2;
     position: absolute;
     top: 60%;
     /* Position below the title */
+}
+
+.hero-wave {
+    position: absolute;
+    top: 50%;
+    left: -10%;
+    width: 120%;
+    height: 400px;
+    z-index: 1;
+    opacity: 1;
+    transform: translateY(-50%);
+    animation: waveMove 8s ease-in-out infinite;
+}
+
+@keyframes waveMove {
+
+    0%,
+    100% {
+        transform: translateY(-50%) translateX(0);
+    }
+
+    50% {
+        transform: translateY(-50%) translateX(-50px);
+    }
 }
 
 /* ... existing styles ... */
@@ -137,10 +160,10 @@ body {
     transform: translateX(-50%) translateY(0);
 }
 
-#growth-is-not-linear {
+#growth-is-not-linear{
     position: absolute;
-    top: 100vh;
-    /* Start after the hero section */
+    top: 220vh;
+    /* Start after waves section (100vh hero + 100vh waves + 50vh margin) */
     left: 0;
     width: 100%;
     /* Height will be set by JS to match aspect ratio */
@@ -230,12 +253,20 @@ body {
     transform: scale(1);
 }
 
-/* Big Pink Flower - larger size */
+/* Regular Pink Flower - Smaller */
+.flower.pink {
+    width: 100px;
+    height: 100px;
+    margin-left: -50px;
+    margin-top: -50px;
+}
+
+/* Big Pink Flower - Reduced size */
 .flower.bigpink {
-    width: 300px;
-    height: 300px;
-    margin-left: -150px;
-    margin-top: -150px;
+    width: 160px;
+    height: 160px;
+    margin-left: -80px;
+    margin-top: -80px;
 }
 
 /* Animation Classes */
@@ -305,7 +336,10 @@ body {
 
 /* Sound Waves Section */
 #sound-waves {
-    position: relative;
+    position: absolute;
+    top: 100vh;
+    /* Start right after hero section */
+    left: 0;
     width: 100%;
     height: 100vh;
     /* Full screen height */
@@ -317,8 +351,8 @@ body {
     align-items: center;
     z-index: 20;
     /* Ensure above garden */
-    margin-top: 300px;
-    /* Spacing from garden */
+    margin-top: 0;
+    /* Remove margin */
 }
 
 .waves-header {
@@ -332,13 +366,13 @@ body {
 
 .waves-header h1 {
     font-size: 5rem;
-    color: #1a1a1a;
+    color: #3c4b5f;
     margin: 0;
 }
 
 .waves-header p {
     font-size: 2rem;
-    color: #64748b;
+    color: #3c4b5f;
     margin-top: 1rem;
 }
 
@@ -374,7 +408,7 @@ canvas {
 
 .emotions-header h1 {
     font-size: 5rem;
-    color: #1a1a1a;
+    color: #3c4b5f;
     margin: 0;
     margin-bottom: 0.5rem;
     /* Reduced from 3rem to bring subtitle closer */
@@ -383,7 +417,7 @@ canvas {
 .emotions-subtitle {
     font-size: 2rem;
     font-weight: 400;
-    color: #64748b;
+    color: #3c4b5f;
     margin: 0;
     /* Removed margin-top to bring closer to title */
     text-align: center;
@@ -442,7 +476,7 @@ canvas {
 }
 
 .square-yellow {
-    background-color: #e4c353;
+    background-color: #ffdb73;
     /* Yellow from waves */
 }
 
@@ -482,24 +516,47 @@ canvas {
 
 .circles-text {
     font-size: 3rem;
-    color: #1a1a1a;
+    color: #3c4b5f;
     text-align: center;
     margin: 0 0 4rem 0;
     transition: opacity 0.5s ease-out;
 }
 
-.circles-text-below {
-    font-size: 3rem;
-    color: #1a1a1a;
-    text-align: center;
+.observing-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
     margin: 2rem 0 0 0;
-    /* Reduced from 4rem to bring closer to circles */
     opacity: 0;
     transition: opacity 0.5s ease-out;
 }
 
+.circles-text-below {
+    font-size: 3rem;
+    color: #3c4b5f;
+    text-align: center;
+    margin: 0;
+}
+
 .circles-text-below strong {
     font-weight: 700;
+}
+
+.restart-circles-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #3c4b5f;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease;
+}
+
+.restart-circles-btn:hover {
+    transform: rotate(90deg);
 }
 
 .grid-container {
@@ -530,7 +587,7 @@ canvas {
 /* Removed margin reset rules as they are no longer needed */
 
 .circle-yellow {
-    background: radial-gradient(circle, rgba(228, 195, 83, 0) 0%, rgba(228, 195, 83, 0.3) 40%, rgba(228, 195, 83, 1) 100%);
+    background: radial-gradient(circle, rgba(255, 219, 115, 0) 0%, rgba(255, 219, 115, 0.3) 40%, rgba(255, 219, 115, 1) 100%);
 }
 
 .circle-blue {
@@ -598,10 +655,10 @@ canvas {
 
 /* Popped State (60% smaller) */
 .circle.popped {
-    width: 72px;
+    width: 50px;
     /* 40% of 180px */
-    height: 72px;
-    opacity: 0.8;
+    height: 50px;
+    opacity: 1;
     transform: scale(1) rotate(0deg);
     /* Reset transform */
     animation: appear 0.4s ease-out forwards;
@@ -616,7 +673,7 @@ canvas {
 
     100% {
         transform: scale(1);
-        opacity: 0.8;
+        opacity: 1;
     }
 }
 
@@ -650,7 +707,7 @@ canvas {
 
 .regulation-practice-header h1 {
     font-size: 4rem;
-    color: #1a1a1a;
+    color: #3c4b5f;
     margin: 0;
     line-height: 1.3;
 }
@@ -684,24 +741,24 @@ canvas {
 .circle-title {
     font-size: 2.5rem;
     font-weight: 700;
-    color: #1a1a1a;
+    color: #ffffff;
     margin: 0 0 1rem 0;
 }
 
 .circle-body {
     font-size: 1.3rem;
     font-weight: 400;
-    color: #1a1a1a;
+    color: #ffffff;
     margin: 0;
     line-height: 1.5;
 }
 
 .gradient-circle-blue {
-    background: radial-gradient(circle, rgba(74, 157, 205, 0) 0%, rgba(74, 157, 205, 0.3) 40%, rgba(74, 157, 205, 1) 100%);
+    background-color: #4a9dcd;
 }
 
 .gradient-circle-orange {
-    background: radial-gradient(circle, rgba(238, 170, 66, 0) 0%, rgba(238, 170, 66, 0.3) 40%, rgba(238, 170, 66, 1) 100%);
+    background-color: #eeaa42;
 }
 
 /* Practice Emotions Section */
@@ -711,6 +768,7 @@ canvas {
     min-height: 60vh;
     background-color: #faf9f5;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     padding: 200px 20px;
@@ -727,9 +785,336 @@ canvas {
 
 .practice-emotions-header h1 {
     font-size: 4rem;
-    color: #1a1a1a;
+    color: #3c4b5f;
     margin: 0;
     line-height: 1.3;
+}
+
+.problem-visualization {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 100px;
+}
+
+.blue-semicircle {
+    width: 600px;
+    height: 300px;
+    /* Half of width */
+    background-color: #4a9dcd;
+    border-radius: 300px 300px 0 0;
+    /* Top-left, Top-right, Bottom-right, Bottom-left */
+    opacity: 1;
+    transform-origin: bottom center;
+    transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.blue-semicircle.solved {
+    transform: translateX(150px) scale(0.3);
+}
+
+.yellow-circle-small {
+    width: 100px;
+    height: 100px;
+    background-color: #ffdb73;
+    border-radius: 50%;
+    position: absolute;
+    bottom: 78px;
+    /* Positioned on top of the semi-circle */
+    z-index: 2;
+    cursor: pointer;
+    transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.yellow-circle-small.solved {
+    transform: translateX(-150px);
+}
+
+.visualization-text {
+    font-size: 2rem;
+    color: #3c4b5f;
+    margin-top: 2rem;
+    text-align: center;
+}
+
+/* How It Works Section */
+#how-it-works {
+    position: relative;
+    width: 100%;
+    min-height: 60vh;
+    background-color: #faf9f5;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 200px 20px;
+    z-index: 20;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.how-it-works-header h1 {
+    font-size: 4rem;
+    color: #3c4b5f;
+    margin: 0 0 100px 0;
+    line-height: 1.3;
+    text-align: center;
+}
+
+.how-it-works-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 100px;
+    /* Increased from 60px for more spacing */
+    max-width: 1200px;
+    width: 100%;
+}
+
+.small-purple-circle {
+    width: 100px;
+    height: 100px;
+    background: radial-gradient(circle, rgba(173, 136, 185, 0) 0%, rgba(173, 136, 185, 0.3) 40%, rgba(173, 136, 185, 1) 100%);
+    border-radius: 50%;
+    cursor: pointer;
+    /* Feedback: Interactive */
+    transition: transform 0.1s ease-out, background 0.1s ease-out;
+    /* Smooth transitions */
+    animation: breathe 4s ease-in-out infinite;
+    /* Visual Cue: Breathing */
+}
+
+/* Breathing animation for initial state */
+@keyframes breathe {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 0.8;
+    }
+
+    50% {
+        transform: scale(1.05);
+        opacity: 1;
+    }
+}
+
+.feeling-text {
+    font-size: 2rem;
+    font-weight: 300;
+    /* Typography: Lighter weight for elegance */
+    color: #3c4b5f;
+    margin: 0;
+    text-align: center;
+    transition: opacity 0.5s ease-out;
+    letter-spacing: 0.5px;
+    /* Typography: Spacing */
+}
+
+.instruction-text {
+    font-size: 0.9rem;
+    /* Typography: Smaller size */
+    font-weight: 500;
+    color: #3c4b5f;
+    margin: 0;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 0.8s ease-out, transform 0.3s ease-out;
+    background-color: rgba(255, 255, 255, 0.8);
+    /* Backdrop blur support */
+    backdrop-filter: blur(5px);
+    padding: 12px 24px;
+    border-radius: 50px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    /* Instruction: Elegant shadow */
+}
+
+.purple-circle-container {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.purple-circle-interactive {
+    width: 80px;
+    height: 80px;
+    background: radial-gradient(circle, rgba(173, 136, 185, 0) 0%, rgba(173, 136, 185, 0.3) 40%, rgba(173, 136, 185, 1) 100%);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.3s ease-out, background 0.3s ease-out;
+    position: relative;
+    z-index: 2;
+}
+
+.purple-circle-background {
+    width: 80px;
+    height: 80px;
+    background: radial-gradient(circle, rgba(120, 80, 140, 0) 0%, rgba(120, 80, 140, 0.5) 40%, rgba(120, 80, 140, 1) 100%);
+    border-radius: 50%;
+    position: absolute;
+    z-index: 1;
+    opacity: 0;
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+}
+
+.purple-circle-background-2 {
+    width: 80px;
+    height: 80px;
+    background: radial-gradient(circle, rgba(80, 40, 100, 0) 0%, rgba(80, 40, 100, 0.6) 40%, rgba(80, 40, 100, 1) 100%);
+    border-radius: 50%;
+    position: absolute;
+    z-index: 0;
+    opacity: 0;
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+}
+
+.how-it-works-text {
+    font-size: 2rem;
+    color: #3c4b5f;
+    margin-top: 1rem;
+    text-align: center;
+    transition: opacity 0.5s ease-out;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        transform: scale(2);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(2.1);
+        opacity: 1;
+    }
+}
+
+@keyframes scalePulse {
+
+    0%,
+    100% {
+        transform: scale(2.8);
+    }
+
+    50% {
+        transform: scale(2.95);
+    }
+}
+
+.purple-circle-interactive.pulsing,
+.purple-circle-background.pulsing,
+.purple-circle-background-2.pulsing,
+.small-purple-circle.pulsing {
+    animation: pulse 4s ease-in-out infinite;
+}
+
+.try-again-btn {
+    margin-top: 2rem;
+    padding: 1rem 2rem;
+    font-size: 1.5rem;
+    background-color: #1a1a1a;
+    color: #faf9f5;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.try-again-btn:hover {
+    transform: scale(1.05);
+    background-color: #333;
+}
+
+@keyframes explode {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(3);
+        opacity: 0;
+    }
+}
+
+.exploding {
+    animation: explode 0.6s ease-out forwards;
+}
+
+.orange-circle-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 400px;
+    height: 400px;
+    margin-top: 2rem;
+    opacity: 0;
+    transition: opacity 0.8s ease-out;
+}
+
+.orange-circle-container.visible {
+    opacity: 1;
+}
+
+.orange-circle-interactive {
+    width: 80px;
+    height: 80px;
+    background: radial-gradient(circle, rgba(238, 170, 66, 0) 0%, rgba(238, 170, 66, 0.3) 40%, rgba(238, 170, 66, 1) 100%);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.3s ease-out, background 0.3s ease-out, opacity 0.3s ease-out;
+    position: relative;
+    z-index: 2;
+}
+
+@keyframes orangePulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.2);
+    }
+}
+
+.orange-circle-interactive.pulsing {
+    animation: orangePulse 1.5s ease-in-out 3;
+}
+
+.orange-circle-interactive.fading {
+    animation: fadeAway 3s ease-out forwards;
+}
+
+@keyframes fadeAway {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+}
+
+.orange-circle-text {
+    font-size: 2rem;
+    color: #3c4b5f;
+    margin-top: 1rem;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 0.5s ease-out;
 }
 
 /* Regulation Explanation Section */
@@ -741,7 +1126,7 @@ canvas {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 200px 20px;
+    padding: 50px 20px;
     /* Increased from 100px for more separation */
     z-index: 20;
     opacity: 0;
@@ -909,4 +1294,597 @@ canvas {
 
 .hero-play-btn:hover {
     transform: translateX(-50%) scale(1.1);
+}
+
+/* Step 1: Observe Section */
+#step-observe {
+    position: relative;
+    /* Ensure z-index works */
+    z-index: 20;
+    /* Bring above scroll-text */
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 4rem 2rem;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 1s ease-out, transform 1s ease-out;
+}
+
+#step-observe.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.step-observe-header {
+    margin-bottom: 4rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: rgba(245, 244, 240, 0.95);
+    /* Very subtle difference from #faf9f5 */
+    /* Match bg color with transparency */
+    backdrop-filter: blur(5px);
+    width: 100vw;
+    left: 50%;
+    margin-left: -50vw;
+    transform: none;
+    /* Remove transform to avoid issues */
+    padding: 1rem 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+}
+
+.step-observe-header h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    color: #3c4b5f;
+    text-align: center;
+    margin: 0;
+}
+
+.observe-subsection {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+}
+
+.subsection-title {
+    font-size: 2rem;
+    font-weight: 400;
+    color: #3c4b5f;
+    text-align: center;
+    margin: 0;
+}
+
+.radar-container {
+    width: 100%;
+    max-width: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.radar-svg {
+    width: 100%;
+    height: auto;
+}
+
+.radar-circle {
+    fill: none;
+    stroke: #3c4b5f;
+    stroke-width: 2;
+    opacity: 0.7;
+}
+
+.radar-line {
+    stroke: #3c4b5f;
+    stroke-width: 2;
+    opacity: 0.7;
+}
+
+.radar-center {
+    fill: #3c4b5f;
+}
+
+.radar-sweep {
+    stroke: #3c4b5f;
+    stroke-width: 2;
+    opacity: 0.8;
+    transform-origin: 200px 200px;
+    animation: radarSweep 4s linear infinite;
+    filter: drop-shadow(0 0 4px rgba(60, 75, 95, 0.6));
+}
+
+@keyframes radarSweep {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.radar-blip {
+    fill: #ad88b9;
+    /* Default fallback */
+    opacity: 0;
+    animation: blipFade 4s linear infinite;
+    /* Match sweep duration */
+    filter: blur(8px);
+    /* Blurred edges */
+}
+
+/* Assign specific colors to each blip */
+.radar-blip:nth-child(4) {
+    fill: #ffdb73;
+}
+
+/* Yellow */
+.radar-blip:nth-child(5) {
+    fill: #4a9dcd;
+}
+
+/* Blue */
+.radar-blip:nth-child(6) {
+    fill: #c86056;
+}
+
+/* Red */
+.radar-blip:nth-child(7) {
+    fill: #6db5a0;
+}
+
+/* Green */
+.radar-blip:nth-child(8) {
+    fill: #ad88b9;
+}
+
+/* Purple */
+.radar-blip:nth-child(9) {
+    fill: #eb8aad;
+}
+
+/* Pink */
+.radar-blip:nth-child(10) {
+    fill: #eeaa42;
+}
+
+/* Orange */
+.radar-blip:nth-child(11) {
+    fill: #9ad9e0;
+}
+
+/* Lightblue */
+.radar-blip:nth-child(12) {
+    fill: #bdeaa3;
+}
+
+/* Lightgreen */
+/* Note: nth-child indices start from 4 because there are 3 preceding elements in the SVG (circles and lines) */
+
+@keyframes blipFade {
+    0% {
+        opacity: 0;
+    }
+
+    1% {
+        opacity: 1;
+        /* Appear instantly when sweep hits */
+    }
+
+    25% {
+        opacity: 0;
+        /* Fade out over 1 second (1/4 of 4s) */
+    }
+
+    100% {
+        opacity: 0;
+        /* Stay hidden for rest of cycle */
+    }
+}
+
+.fade-text {
+    font-size: 2.5rem;
+    /* Bigger size as requested */
+    color: #3c4b5f;
+    text-align: center;
+    margin-top: 2rem;
+    animation: fadeInOut 4s infinite;
+}
+
+@keyframes fadeInOut {
+
+    0%,
+    100% {
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+.observe-subsection-2 {
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10vh;
+    position: relative;
+    /* Big space under previous text */
+}
+
+.observe-subsection-2 .subsection-title {
+    font-size: 2rem;
+    /* Bigger size */
+    line-height: 1.2;
+    /* Better spacing for two lines */
+    position: relative;
+    z-index: 1;
+}
+
+dotlottie-wc {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    margin-top: 4rem;
+    z-index: 1;
+}
+
+.continue-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 2rem;
+    opacity: 0;
+    animation: fadeIn 1s ease-out 3s forwards;
+    /* Delay appearance */
+}
+
+.continue-text {
+    font-size: 1rem;
+    color: #3c4b5f;
+    margin-bottom: 1rem;
+    font-family: 'Gowun Dodum', sans-serif;
+    text-align: center;
+}
+
+.continue-btn {
+    padding: 0.8rem 2.5rem;
+    font-size: 1.1rem;
+    background-color: transparent;
+    color: #3c4b5f;
+    border: 1px solid #3c4b5f;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Gowun Dodum', sans-serif;
+}
+
+.continue-btn:hover {
+    background-color: #3c4b5f;
+    color: #faf9f5;
+    transform: translateY(-2px);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#timer-canvas {
+    position: relative;
+    width: 50px;
+    height: 50px;
+    margin-top: 1rem;
+    z-index: 1;
+}
+
+.hidden {
+    display: none;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+}
+
+.visible-flex {
+    display: flex !important;
+    opacity: 1;
+    pointer-events: auto;
+}
+
+#continue-btn {
+    margin-top: 2rem;
+    padding: 0.8rem 2rem;
+    font-size: 1.2rem;
+    background-color: #3c4b5f;
+    color: #faf9f5;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+    font-family: 'Gowun Dodum', sans-serif;
+    position: relative;
+    z-index: 2;
+}
+
+#continue-btn:hover {
+    transform: scale(1.05);
+    background-color: #2c3b4f;
+}
+
+#emotions-options {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 2rem;
+    gap: 1.5rem;
+    position: relative;
+    z-index: 2;
+}
+
+.question-text {
+    font-size: 1.5rem;
+    color: #3c4b5f;
+    text-align: center;
+    margin: 0;
+}
+
+.emotions-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.emotion-btn {
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    background-color: transparent;
+    color: #3c4b5f;
+    border: 1px solid #3c4b5f;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: 'Gowun Dodum', sans-serif;
+}
+
+.emotion-btn:hover {
+    background-color: #3c4b5f;
+    color: #faf9f5;
+    transform: translateY(-2px);
+}
+
+.fade-in {
+    animation: fadeIn 0.8s ease-out forwards;
+    opacity: 0;
+    /* Start hidden */
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Curtain Animation */
+#curtain {
+    position: absolute;
+    display: none;
+    /* Hide initially */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #faf9f5;
+    z-index: 2147483646;
+    /* Max z-index - 1 */
+    /* High z-index, but below button */
+    transition: transform 1s cubic-bezier(0.77, 0, 0.175, 1);
+    /* EaseInOutQuart */
+}
+
+#curtain.active {
+    transform: translateY(100vh);
+}
+
+.emotion-btn-fixed {
+    position: absolute !important;
+    z-index: 2147483647 !important;
+    /* Max z-index */
+    transition: all 1s cubic-bezier(0.77, 0, 0.175, 1) !important;
+    margin: 0 !important;
+    /* Reset margins */
+}
+
+.emotion-context-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -150px);
+    /* Above button (adjusted for scale) */
+    font-size: 1.2rem;
+    color: #3c4b5f;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    width: 80%;
+    max-width: 600px;
+    z-index: 2147483647;
+    pointer-events: auto;
+    /* Allow selection */
+    font-family: 'Gowun Dodum', sans-serif;
+    user-select: text;
+    /* Explicitly allow text selection */
+}
+
+.emotion-menu {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, 120px);
+    /* Below text */
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    z-index: 2147483647;
+    width: 300px;
+}
+
+.emotion-menu.visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translate(-50%, 110px);
+}
+
+.emotion-menu .emotion-btn {
+    background-color: #faf9f5;
+    /* Ensure background for readability */
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+}
+
+.sub-emotions-container {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    width: 90%;
+    max-width: 800px;
+    z-index: 2147483647;
+    pointer-events: auto;
+}
+
+.sub-emotion-btn {
+    position: relative;
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+    background-color: #faf9f5;
+    color: #3c4b5f;
+    border: 1px solid #3c4b5f;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.5s ease;
+    font-family: 'Gowun Dodum', sans-serif;
+    opacity: 0;
+    white-space: nowrap;
+}
+
+.sub-emotion-btn:hover {
+    background-color: #3c4b5f;
+    color: #faf9f5;
+    transform: scale(1.1);
+}
+
+/* Sub-Emotion Detail Section */
+#sub-emotion-section {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 4rem 2rem;
+    background-color: #faf9f5;
+    opacity: 0;
+    transform: translateY(100px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+#sub-emotion-section.visible {
+    opacity: 1;
+}
+
+.sub-emotion-content {
+    text-align: center;
+    width: 100%;
+    max-width: 1200px;
+}
+
+.sub-emotion-s.question-text {
+    font-size: 1.5rem;
+    color: #3c4b5f;
+    margin-bottom: 2rem;
+    font-family: 'Gowun Dodum', sans-serif;
+}
+
+.skip-timer-btn {
+    margin-top: 1rem;
+    padding: 0.5rem 1.5rem;
+    font-size: 0.9rem;
+    background-color: transparent;
+    color: #3c4b5f;
+    border: 1px solid #3c4b5f;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: 'Gowun Dodum', sans-serif;
+}
+
+.skip-timer-btn:hover {
+    background-color: #3c4b5f;
+    color: #faf9f5;
+    transform: translateY(-2px);
+}
+
+.sub-emotion-subtitle {
+    font-size: 3rem;
+    color: #3c4b5f;
+    margin-bottom: 4rem;
+    font-family: 'Gowun Dodum', sans-serif;
+    font-weight: 400;
+}
+
+.circles-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4rem;
+    flex-wrap: wrap;
+}
+
+.emotion-circle {
+    width: 250px;
+    height: 250px;
+    transition: all 0.3s ease;
+}
+
+.emotion-circle:hover {
+    transform: scale(1.05);
+}
+
+.circles-description {
+    margin-top: 3rem;
+    font-size: 1.5rem;
+    color: #3c4b5f;
+    font-family: 'Gowun Dodum', sans-serif;
+    text-align: center;
+    max-width: 600px;
 }

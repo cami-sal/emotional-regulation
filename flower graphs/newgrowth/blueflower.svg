@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Capa_2" data-name="Capa 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 111.96 111.96">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fdf4a0;
+      }
+
+      .cls-2 {
+        fill: #4a9dcd;
+      }
+    </style>
+  </defs>
+  <g id="Capa_2-2" data-name="Capa 2">
+    <g>
+      <g>
+        <ellipse class="cls-2" cx="45.25" cy="28.07" rx="8.08" ry="29.91" transform="translate(-7.06 18.1) rotate(-21.03)"/>
+        <ellipse class="cls-2" cx="66.71" cy="83.9" rx="8.08" ry="29.91" transform="translate(-25.66 29.52) rotate(-21.03)"/>
+        <ellipse class="cls-2" cx="83.9" cy="45.25" rx="29.91" ry="8.08" transform="translate(-10.65 33.11) rotate(-21.03)"/>
+        <ellipse class="cls-2" cx="28.07" cy="66.71" rx="29.91" ry="8.08" transform="translate(-22.07 14.51) rotate(-21.03)"/>
+        <ellipse class="cls-2" cx="83.31" cy="68.13" rx="8.08" ry="29.91" transform="translate(-12.8 116.57) rotate(-66.03)"/>
+        <ellipse class="cls-2" cx="28.66" cy="43.83" rx="8.08" ry="29.91" transform="translate(-23.04 52.2) rotate(-66.03)"/>
+        <ellipse class="cls-2" cx="43.83" cy="83.31" rx="29.91" ry="8.08" transform="translate(-50.1 89.51) rotate(-66.03)"/>
+        <ellipse class="cls-2" cx="68.13" cy="28.66" rx="29.91" ry="8.08" transform="translate(14.26 79.27) rotate(-66.03)"/>
+      </g>
+      <circle class="cls-1" cx="55.98" cy="55.98" r="11.04"/>
+    </g>
+  </g>
+</svg>

@@ -160,7 +160,7 @@ body {
     transform: translateX(-50%) translateY(0);
 }
 
-#growth-is-not-linear{
+#growth-is-not-linear {
     position: absolute;
     top: 220vh;
     /* Start after waves section (100vh hero + 100vh waves + 50vh margin) */
@@ -877,11 +877,11 @@ canvas {
 .small-purple-circle {
     width: 100px;
     height: 100px;
-    background: radial-gradient(circle, rgba(173, 136, 185, 0) 0%, rgba(173, 136, 185, 0.3) 40%, rgba(173, 136, 185, 1) 100%);
+    background: rgba(173, 136, 185, 1);
     border-radius: 50%;
     cursor: pointer;
     /* Feedback: Interactive */
-    transition: transform 0.1s ease-out, background 0.1s ease-out;
+    transition: transform 0.1s ease-out;
     /* Smooth transitions */
     animation: breathe 4s ease-in-out infinite;
     /* Visual Cue: Breathing */
@@ -903,7 +903,7 @@ canvas {
 }
 
 .feeling-text {
-    font-size: 2rem;
+    font-size: 3rem;
     font-weight: 300;
     /* Typography: Lighter weight for elegance */
     color: #3c4b5f;
@@ -914,6 +914,15 @@ canvas {
     /* Typography: Spacing */
 }
 
+.text-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+
+
 .instruction-text {
     font-size: 0.9rem;
     /* Typography: Smaller size */
@@ -921,14 +930,13 @@ canvas {
     color: #3c4b5f;
     margin: 0;
     text-align: center;
-    opacity: 0;
+    opacity: 1;
     transition: opacity 0.8s ease-out, transform 0.3s ease-out;
     background-color: rgba(255, 255, 255, 0.8);
     /* Backdrop blur support */
     backdrop-filter: blur(5px);
     padding: 12px 24px;
     border-radius: 50px;
-    border: 1px solid rgba(0, 0, 0, 0.1);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     /* Instruction: Elegant shadow */
 }
@@ -1327,17 +1335,22 @@ canvas {
     /* Very subtle difference from #faf9f5 */
     /* Match bg color with transparency */
     backdrop-filter: blur(5px);
+
     width: 100vw;
-    left: 50%;
-    margin-left: -50vw;
+    margin-left: calc(50% - 50vw);
+    /* Edge-to-edge breakout */
+
     transform: none;
     /* Remove transform to avoid issues */
     padding: 1rem 0;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .step-observe-header h1 {
-    font-size: 3rem;
+    font-size: 4rem;
     font-weight: 700;
     color: #3c4b5f;
     text-align: center;
@@ -1353,7 +1366,7 @@ canvas {
 }
 
 .subsection-title {
-    font-size: 2rem;
+    font-size: 3rem;
     font-weight: 400;
     color: #3c4b5f;
     text-align: center;
@@ -1411,12 +1424,8 @@ canvas {
 
 .radar-blip {
     fill: #ad88b9;
-    /* Default fallback */
     opacity: 0;
     animation: blipFade 4s linear infinite;
-    /* Match sweep duration */
-    filter: blur(8px);
-    /* Blurred edges */
 }
 
 /* Assign specific colors to each blip */
@@ -1494,7 +1503,6 @@ canvas {
     color: #3c4b5f;
     text-align: center;
     margin-top: 2rem;
-    animation: fadeInOut 4s infinite;
 }
 
 @keyframes fadeInOut {
@@ -1516,18 +1524,20 @@ canvas {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin-top: 10vh;
+    margin-top: 30vh;
     position: relative;
     /* Big space under previous text */
 }
 
 .observe-subsection-2 .subsection-title {
-    font-size: 2rem;
+    font-size: 3rem;
     /* Bigger size */
     line-height: 1.2;
     /* Better spacing for two lines */
     position: relative;
     z-index: 1;
+    opacity: 0;
+    animation: fadeIn 2s ease-out forwards;
 }
 
 dotlottie-wc {
@@ -1536,6 +1546,72 @@ dotlottie-wc {
     height: 300px;
     margin-top: 4rem;
     z-index: 1;
+}
+
+.emotions-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 15px;
+    margin-top: 2rem;
+    width: 100%;
+    max-width: 800px;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.emotions-grid.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.emotion-card {
+    background-color: transparent;
+    width: 100%;
+    perspective: 1000px;
+    cursor: pointer;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.emotion-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+}
+
+.emotion-card.flipped .emotion-card-inner {
+    transform: rotateY(180deg);
+}
+
+.emotion-card-front,
+.emotion-card-back {
+    width: 100%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+.emotion-card-front {
+    position: relative;
+    /* Determines height */
+}
+
+.emotion-card-back {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    transform: rotateY(180deg);
+}
+
+.emotion-card img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    display: block;
 }
 
 .continue-container {
@@ -1549,7 +1625,7 @@ dotlottie-wc {
 }
 
 .continue-text {
-    font-size: 1rem;
+    font-size: 2rem;
     color: #3c4b5f;
     margin-bottom: 1rem;
     font-family: 'Gowun Dodum', sans-serif;
@@ -1887,4 +1963,56 @@ dotlottie-wc {
     font-family: 'Gowun Dodum', sans-serif;
     text-align: center;
     max-width: 600px;
+}
+
+/* Growth Section Animations */
+@keyframes rotate-360 {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes pulse-soft {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes rotate-soft {
+    0% {
+        transform: rotate(-5deg);
+    }
+
+    50% {
+        transform: rotate(5deg);
+    }
+
+    100% {
+        transform: rotate(-5deg);
+    }
+}
+
+.blue-flower {
+    animation: rotate-360 20s linear infinite;
+}
+
+.pink-flower {
+    animation: pulse-soft 3s ease-in-out infinite;
+}
+
+.leaf-animation {
+    animation: rotate-soft 4s ease-in-out infinite;
+    transform-origin: center center;
 }

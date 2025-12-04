@@ -215,8 +215,10 @@
             </header>
             <div class="how-it-works-content">
                 <div class="small-purple-circle"></div>
-                <p class="feeling-text">A feeling arises</p>
-                <p class="instruction-text">Touch the bubble</p>
+                <div class="text-group">
+                    <p class="feeling-text">A feeling arises</p>
+                    <p class="instruction-text">Touch the circle</p>
+                </div>
             </div>
         </section>
 
@@ -275,31 +277,11 @@
                     <p class="continue-text">Take a few seconds to think and then continue</p>
                     <button id="continue-btn" class="continue-btn">Continue</button>
                 </div>
+                <div id="emotions-grid" class="emotions-grid hidden"></div>
 
-                <div id="emotions-options" class="hidden">
-                    <p class="question-text">Between this options, how does it make you feel</p>
-                    <div class="emotions-buttons">
-                        <button class="emotion-btn">Sad</button>
-                        <button class="emotion-btn">Embarrassed</button>
-                        <button class="emotion-btn">Anxious</button>
-                        <button class="emotion-btn">Angry</button>
-                        <button class="emotion-btn">Hurt</button>
-                    </div>
-                </div>
             </div>
         </section>
 
-        <!-- Sub-Emotion Detail Section -->
-        <section id="sub-emotion-section" class="hidden">
-            <div class="sub-emotion-content">
-                <h2 id="sub-emotion-subtitle" class="sub-emotion-subtitle"></h2>
-                <div class="circles-container">
-                    <canvas id="complex-wheel" class="emotion-circle" width="500" height="500"></canvas>
-                    <canvas id="simple-wheel" class="emotion-circle" width="500" height="500"></canvas>
-                </div>
-                <p class="circles-description">Once we name our emotions, we begin to truly feel them</p>
-            </div>
-        </section>
     </div>
     <div id="curtain"></div>
     <script src="script.js"></script>

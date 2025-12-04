@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const garden = document.getElementById('growth-is-not-linear');
     const spacer = document.querySelector('.spacer');
 
-    const pathScale = 0.8;
+    const pathScale = 0.65;
     const pathOffset = 17.5; // Offset to account for centered SVG (50% - 65%/2 = 17.5%)
 
     // SVG Path Data (from basepunto.svg)
@@ -100,25 +100,25 @@ document.addEventListener('DOMContentLoaded', () => {
     // Add start.svg at the beginning of the path
     const startPoint = path.getPointAtLength(0);
     const startElement = document.createElement('div');
-    
+
     // Convert SVG coordinates to percentages
     let startLeft = pathOffset + (startPoint.x / originalWidth) * 100 * pathScale;
     let startTop = pathOffset + (startPoint.y / originalHeight) * 100 * pathScale;
     // Move it up by reducing the top position
     startTop = startTop - 18.5; // Move up more
-    
+
     startElement.style.position = 'absolute';
     startElement.style.left = `${startLeft}%`;
     startElement.style.top = `${startTop}%`;
     startElement.style.width = '100px';
     startElement.style.height = '100px';
-    startElement.style.marginLeft = '-130px';
+    startElement.style.marginLeft = '-50px';
     startElement.style.marginTop = '-50px';
     startElement.style.zIndex = '10';
     startElement.style.opacity = '1';
     startElement.style.transform = 'scale(1)';
     startElement.style.filter = 'none';
-    
+
     const startImg = document.createElement('img');
     startImg.src = 'flower graphs/newgrowth/start.svg';
     startImg.style.width = '100%';
@@ -127,7 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
     startImg.style.filter = 'none';
     startElement.appendChild(startImg);
     garden.appendChild(startElement);
-    
+
     // Add all elements from newgrowth folder
     // EASY TO EDIT: Use percentages for left (0-100) and top (0-100), and size in pixels
     const elements = [
@@ -143,14 +143,14 @@ document.addEventListener('DOMContentLoaded', () => {
         { file: 'yellowfan.svg', left: 40, top: 34.5, size: 200 },
         { file: 'finalpinkflower.png', left: 75, top: 71, size: 300 }
     ];
-    
+
     // Store elements for animation
     const animatedElements = [];
-    
+
     // Function to add an element at a specific position
     function addElement(file, left, top, size) {
         const element = document.createElement('div');
-        
+
         // Set styles using direct percentages
         element.style.position = 'absolute';
         element.style.left = `${left}%`;
@@ -164,7 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
         element.style.transform = 'scale(0.8)'; // Start slightly smaller
         element.style.filter = 'none';
         element.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-        
+
         // Add image
         const img = document.createElement('img');
         img.src = `flower graphs/newgrowth/${file}`;
@@ -172,23 +172,33 @@ document.addEventListener('DOMContentLoaded', () => {
         img.style.height = '100%';
         img.style.objectFit = 'contain';
         img.style.filter = 'none';
+
+        // Add specific animation classes based on file name
+        if (file.includes('blueflower')) {
+            img.classList.add('blue-flower');
+        } else if (file.includes('finalpinkflower')) {
+            img.classList.add('pink-flower');
+        } else if (file.includes('leaf')) {
+            img.classList.add('leaf-animation');
+        }
+
         element.appendChild(img);
         garden.appendChild(element);
-        
+
         // Calculate position along path based on top percentage
         // Top percentage represents position along the path (0% = start, 100% = end)
         const pathPosition = top / 100; // Convert to 0-1 range
-        
+
         // Store element with its top position for scroll-based animation
         animatedElements.push({
             element: element,
             topPercent: top // Top position percentage (0-100)
         });
     }
-    
+
     // Add all elements
     elements.forEach(e => addElement(e.file, e.left, e.top, e.size));
-    
+
     // Scroll Text Logic
     const words = document.querySelectorAll('.word');
     const wordPositions = [0.1, 0.3, 0.5, 0.7, 0.85, 0.95];
@@ -199,41 +209,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         words.forEach((word, index) => {
             let relativeTop = wordPositions[index] * dims.height;
-            
-            // Special positioning for "Growth" (first word) - move down and left
-            if (index === 0) {
-                relativeTop = relativeTop + (dims.height * 0.05); // Move down 5% more
-                word.style.left = '40%'; // Move left (from default 50%)
-            } 
-            // Special positioning for "is" (second word) - move up
-            else if (index === 1) {
-                relativeTop = relativeTop - (dims.height * 0.05); // Move up 5%
-                word.style.left = '50%'; // Default center
-            } 
-            // Special positioning for "not" (third word) - move left and up
-            else if (index === 2) {
-                relativeTop = relativeTop - (dims.height * 0.12); // Move up 5%
-                word.style.left = '45%'; // Move left a little
-            } 
-            // Special positioning for "a" (fourth word) - move right and up
-            else if (index === 3) {
-                relativeTop = relativeTop - (dims.height * 0.18); // Move up 5%
-                word.style.left = '45%'; // Move right a little
-            } 
-            // Special positioning for "straight" (fifth word) - move left and up
-            else if (index === 4) {
-                relativeTop = relativeTop - (dims.height * 0.12); // Move up 3%
-                word.style.left = '65%'; // Move left a little
-            } 
-            // Special positioning for "line" (sixth word) - move up and left
-            else if (index === 5) {
-                relativeTop = relativeTop - (dims.height * 0.05); // Move up 5%
-                word.style.left = '45%'; // Move left a little
-            } 
-            else {
-                word.style.left = '50%'; // Default center
-            }
-            
+
+            // All words centered
+            word.style.left = '50%';
+
             const absoluteTop = gardenTop + relativeTop;
             word.style.top = `${absoluteTop}px`;
             word.dataset.triggerY = relativeTop;
@@ -330,20 +309,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 word.classList.remove('visible');
             }
         });
-        
+
         // Animate elements in order from top to bottom based on scroll
         animatedElements.forEach(({ element, topPercent }) => {
             // Calculate element's vertical position
             const relativeTop = (topPercent / 100) * dims.height;
             const absoluteY = gardenTop + relativeTop;
-            
+
             // Calculate scroll progress: element appears when it enters viewport
             // Start fading in 100px before element reaches viewport center
             const triggerPoint = absoluteY - (windowHeight * 0.3);
             const fadeDistance = 200; // Fade in over 200px of scroll
             const scrollProgress = (currentScroll - triggerPoint) / fadeDistance;
             const clampedProgress = Math.max(0, Math.min(1, scrollProgress));
-            
+
             // Apply fade-in and scale animation based on scroll progress
             element.style.opacity = clampedProgress.toString();
             const scale = 0.8 + (clampedProgress * 0.2); // Scale from 0.8 to 1.0
@@ -583,6 +562,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let opacity = 0.3; // Initial opacity from CSS
         let isHolding = false;
         let isHovering = false;
+        let isTextTransitioning = false;
         let animationFrameId;
         let holdInterval;
         const maxScale = 2.0; // 200%
@@ -598,18 +578,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (scale < maxScale) {
                 // Even slower growth rate for more deliberate feel
-                scale += 0.002; // Reduced from 0.004 for slower growth
-                opacity = Math.min(opacity + 0.0015, 1); // Proportionally slower opacity change
+                scale += 0.004; // Decreased from 0.008 for slower growth
+                opacity = Math.min(opacity + 0.003, 1); // Proportionally slower opacity change
 
                 purpleCircle.style.transform = `scale(${scale})`;
-                purpleCircle.style.background = `radial-gradient(circle, rgba(173, 136, 185, 0) 0%, rgba(173, 136, 185, ${opacity}) 40%, rgba(173, 136, 185, 1) 100%)`;
+                purpleCircle.style.background = `rgba(173, 136, 185, 1)`;
 
                 // Remove breathing animation while interacting
                 purpleCircle.style.animation = 'none';
 
                 // Change text to "if you fight it" as soon as it starts growing significantly
-                if (scale > 1.1 && feelingText.textContent !== 'if you fight it') {
-                    feelingText.textContent = 'if you fight it';
+                if (scale > 1.1 && feelingText.textContent !== 'if you fight it' && !isTextTransitioning) {
+                    isTextTransitioning = true;
+                    feelingText.style.opacity = '0';
+                    setTimeout(() => {
+                        if (!isMaxedOut) {
+                            feelingText.textContent = 'if you fight it';
+                            feelingText.style.opacity = '1';
+                        }
+                        isTextTransitioning = false;
+                    }, 500);
                 }
 
                 // Check for max state
@@ -704,13 +692,13 @@ document.addEventListener('DOMContentLoaded', () => {
             holdInterval = setInterval(() => {
                 if (scale > 0) {
                     // Slower deflate logic
-                    scale -= 0.015; // Reduced from 0.03 for slower shrinking
-                    opacity = Math.max(opacity - 0.015, 0); // Slower opacity reduction
+                    scale -= 0.02; // Decreased from 0.04 for slower shrinking
+                    opacity = Math.max(opacity - 0.02, 0); // Slower opacity reduction
 
                     if (scale < 0) scale = 0;
 
                     purpleCircle.style.transform = `scale(${scale})`;
-                    purpleCircle.style.background = `radial-gradient(circle, rgba(173, 136, 185, 0) 0%, rgba(173, 136, 185, ${opacity}) 40%, rgba(173, 136, 185, 1) 100%)`;
+                    purpleCircle.style.background = `rgba(173, 136, 185, 1)`;
 
                     if (scale <= 0.1) {
                         purpleCircle.style.opacity = '0';
@@ -767,7 +755,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Revert state if mouse leaves while holding
             if (scale > 0.1 && isMaxedOut) {
-                feelingText.textContent = 'if you fight it, it will persist';
+                feelingText.textContent = 'If you fight it, it will persist';
                 purpleCircle.classList.add('pulsing');
             }
         });
@@ -781,11 +769,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     opacity = 0.3;
                     isMaxedOut = false;
                     isHolding = false;
+                    isTextTransitioning = false;
 
                     // Reset circle appearance
                     purpleCircle.style.transform = '';
                     purpleCircle.style.opacity = '1';
-                    purpleCircle.style.background = 'radial-gradient(circle, rgba(173, 136, 185, 0) 0%, rgba(173, 136, 185, 0.3) 40%, rgba(173, 136, 185, 1) 100%)';
+                    purpleCircle.style.background = 'rgba(173, 136, 185, 1)';
                     purpleCircle.style.animation = 'breathe 4s ease-in-out infinite';
                     purpleCircle.classList.remove('pulsing');
 
@@ -857,415 +846,67 @@ document.addEventListener('DOMContentLoaded', () => {
                 continueContainer.style.display = 'none';
             }
 
-            // Show emotion options
-            const emotionsOptions = document.getElementById('emotions-options');
-            if (emotionsOptions) {
-                emotionsOptions.classList.remove('hidden');
-                emotionsOptions.classList.add('visible-flex');
-                emotionsOptions.classList.add('fade-in');
+            // Show emotion grid
+            const emotionsGrid = document.getElementById('emotions-grid');
+            if (emotionsGrid) {
+                emotionsGrid.innerHTML = ''; // Clear previous content if any
+                emotionsGrid.classList.remove('hidden');
+
+                // Add images 12 to 36
+                for (let i = 12; i <= 36; i++) {
+                    // Create Card Container
+                    const card = document.createElement('div');
+                    card.classList.add('emotion-card');
+
+                    // Create Inner Wrapper
+                    const cardInner = document.createElement('div');
+                    cardInner.classList.add('emotion-card-inner');
+
+                    // Create Front Face
+                    const cardFront = document.createElement('div');
+                    cardFront.classList.add('emotion-card-front');
+                    const imgFront = document.createElement('img');
+                    imgFront.src = `flower graphs/emotion cards/emotioncards-${i}.png`;
+                    imgFront.alt = `Emotion ${i}`;
+                    cardFront.appendChild(imgFront);
+
+                    // Create Back Face
+                    const cardBack = document.createElement('div');
+                    cardBack.classList.add('emotion-card-back');
+                    const imgBack = document.createElement('img');
+                    // Back image corresponds to i + 25 (12 -> 37)
+                    imgBack.src = `flower graphs/emotion cards/emotioncards-${i + 25}.png`;
+                    imgBack.alt = `Emotion ${i + 25}`;
+                    cardBack.appendChild(imgBack);
+
+                    // Assemble Card
+                    cardInner.appendChild(cardFront);
+                    cardInner.appendChild(cardBack);
+                    card.appendChild(cardInner);
+
+                    // Add Click Event for Flip
+                    card.addEventListener('click', () => {
+                        card.classList.toggle('flipped');
+                    });
+
+                    emotionsGrid.appendChild(card);
+
+                    // Staggered Animation
+                    setTimeout(() => {
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, (i - 12) * 50); // Stagger delay
+                }
+
+                // Make grid visible
+                setTimeout(() => {
+                    emotionsGrid.classList.add('visible');
+                }, 100);
             }
         });
     }
 
     // Canvas Animation removed - replaced with Lottie
-
-    // Timer and Continue Button logic removed as per request     // Emotion Selection Animation
-    const emotionBtns = document.querySelectorAll('.emotion-btn');
-    const curtain = document.getElementById('curtain');
-    const stepObserveHeader = document.querySelector('.step-observe-header');
-
-    // Sub-emotions data
-    const subEmotions = {
-        'Sad': ['Grief', 'Despair', 'Lonely', 'Disappointed', 'Hopeless', 'Melancholic'],
-        'Embarrassed': ['Ashamed', 'Flustered', 'Guilty', 'Humiliated', 'Self-conscious', 'Awkward'],
-        'Anxious': ['Worried', 'Afraid', 'Apprehensive', 'Panicked', 'Nervous', 'Overwhelmed'],
-        'Angry': ['Enraged', 'Frustrated', 'Irritated', 'Contemptuous', 'Resentful', 'Hostile'],
-        'Hurt': ['Betrayed', 'Disillusioned', 'Heartbroken', 'Abandoned', 'Invalidated', 'Rejected']
-    };
-
-    // Helper to render sub-emotions in a horizontal list
-    function renderSubEmotions(primaryEmotion, centerX, centerY) {
-        // Remove existing sub-emotions container
-        const existingContainer = document.querySelector('.sub-emotions-container');
-        if (existingContainer) existingContainer.remove();
-
-        // Also remove any loose buttons from previous version
-        document.querySelectorAll('.sub-emotion-btn').forEach(el => el.remove());
-
-        const emotions = subEmotions[primaryEmotion] || [];
-        if (emotions.length === 0) return;
-
-        const container = document.createElement('div');
-        container.classList.add('sub-emotions-container');
-
-        // Position below the button
-        // centerY is the center of the button. Add offset to place container below.
-        container.style.top = `${centerY + 80}px`;
-
-        emotions.forEach((emotion, index) => {
-            const btn = document.createElement('button');
-            btn.classList.add('sub-emotion-btn');
-            btn.textContent = emotion;
-
-            // Add click handler for sub-emotion selection
-            btn.addEventListener('click', () => {
-                transitionToSubEmotionSection(emotion);
-            });
-
-            container.appendChild(btn);
-
-            // Animate in with stagger
-            setTimeout(() => {
-                requestAnimationFrame(() => {
-                    btn.style.opacity = '1';
-                });
-            }, index * 50);
-        });
-
-        document.body.appendChild(container);
-    }
-
-    // Helper to transition to sub-emotion detail section
-    function transitionToSubEmotionSection(subEmotion) {
-        // Get the sub-emotion section
-        const subEmotionSection = document.getElementById('sub-emotion-section');
-        const subEmotionSubtitle = document.getElementById('sub-emotion-subtitle');
-
-        if (!subEmotionSection || !subEmotionSubtitle) return;
-
-        // Set up the new section (but keep it hidden initially)
-        subEmotionSubtitle.textContent = subEmotion;
-        subEmotionSection.classList.remove('hidden');
-        subEmotionSection.style.opacity = '0';
-        subEmotionSection.style.transform = 'translateY(100px)';
-
-        // Get all emotion interaction elements
-        const curtain = document.getElementById('curtain');
-        const emotionBtnFixed = document.querySelectorAll('.emotion-btn-fixed');
-        const emotionContextText = document.querySelector('.emotion-context-text');
-        const emotionMenu = document.querySelector('.emotion-menu');
-        const subEmotionsContainer = document.querySelector('.sub-emotions-container');
-        const headerClone = document.querySelector('.step-observe-header[style*="position: absolute"]');
-
-        // Fade out current elements
-        if (curtain) curtain.style.opacity = '0';
-        emotionBtnFixed.forEach(btn => btn.style.opacity = '0');
-        if (emotionContextText) emotionContextText.style.opacity = '0';
-        if (emotionMenu) emotionMenu.style.opacity = '0';
-        if (subEmotionsContainer) subEmotionsContainer.style.opacity = '0';
-        if (headerClone) headerClone.style.opacity = '0';
-
-        // Wait for fade out, then scroll and show new section
-        setTimeout(() => {
-            // Remove old elements
-            if (curtain) curtain.remove();
-            emotionBtnFixed.forEach(btn => btn.remove());
-            if (emotionContextText) emotionContextText.remove();
-            if (emotionMenu) emotionMenu.remove();
-            if (subEmotionsContainer) subEmotionsContainer.remove();
-            if (headerClone) headerClone.remove();
-
-            // Smooth scroll to the new section
-            subEmotionSection.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
-
-            // Slide in the new section after scroll starts
-            setTimeout(() => {
-                subEmotionSection.style.opacity = '1';
-                subEmotionSection.style.transform = 'translateY(0)';
-                subEmotionSection.classList.add('visible');
-
-                // Draw the color wheels
-                drawComplexWheel('complex-wheel');
-                drawSimpleWheel('simple-wheel');
-            }, 300);
-        }, 500);
-    }
-
-    // Helper to draw 24-segment complex color wheel
-    function drawComplexWheel(canvasId) {
-        const canvas = document.getElementById(canvasId);
-        if (!canvas) return;
-
-        const ctx = canvas.getContext('2d');
-        const centerX = canvas.width / 2;
-        const centerY = canvas.height / 2;
-        const outerRadius = 200;
-
-        // Color palette from document (7 main colors with 4 opacity/brightness variations each)
-        const baseColors = [
-            { r: 255, g: 219, b: 115 },   // Yellow
-            { r: 238, g: 170, b: 66 },   // Orange
-            { r: 200, g: 96, b: 86 },    // Red/Coral
-            { r: 235, g: 138, b: 173 },  // Pink
-            { r: 173, g: 136, b: 185 },  // Purple
-            { r: 74, g: 157, b: 205 },   // Blue
-            { r: 109, g: 181, b: 160 }   // Green
-        ];
-
-        const slices = 7;
-        const rings = 4;
-        const angleStep = (Math.PI * 2) / slices;
-
-        // Rotation offset for each ring to create varied color combinations
-        // Each ring rotates by different amounts to ensure no two triangular sections are the same
-        const ringRotations = [
-            0,                    // Ring 1: no rotation
-            angleStep * 0.5,      // Ring 2: half a slice
-            angleStep * 1.2,      // Ring 3: more than one slice
-            angleStep * 2.3       // Ring 4: over two slices
-        ];
-
-        // Draw each slice divided into rings
-        for (let slice = 0; slice < slices; slice++) {
-            const baseColor = baseColors[slice];
-
-            for (let ring = 0; ring < rings; ring++) {
-                const innerRadius = (outerRadius / rings) * ring;
-                const ringOuterRadius = (outerRadius / rings) * (ring + 1);
-
-                // Apply rotation offset to this ring
-                const rotationOffset = ringRotations[ring];
-                const startAngle = slice * angleStep - Math.PI / 2 + rotationOffset;
-                const endAngle = startAngle + angleStep;
-
-                // Create radial gradient for each segment
-                const gradient = ctx.createRadialGradient(
-                    centerX, centerY, innerRadius,
-                    centerX, centerY, ringOuterRadius
-                );
-
-                // Opacity increases from center to edge (0.3 to 1.0)
-                const opacity = 0.3 + (ring * 0.7 / (rings - 1));
-
-                gradient.addColorStop(0, `rgba(${baseColor.r}, ${baseColor.g}, ${baseColor.b}, 0)`);
-                gradient.addColorStop(0.4, `rgba(${baseColor.r}, ${baseColor.g}, ${baseColor.b}, ${opacity * 0.5})`);
-                gradient.addColorStop(1, `rgba(${baseColor.r}, ${baseColor.g}, ${baseColor.b}, ${opacity})`);
-
-                ctx.beginPath();
-                ctx.arc(centerX, centerY, ringOuterRadius, startAngle, endAngle);
-                ctx.arc(centerX, centerY, innerRadius, endAngle, startAngle, true);
-                ctx.closePath();
-
-                ctx.fillStyle = gradient;
-                ctx.fill();
-            }
-        }
-    }
-
-    // Helper to draw 6-segment simple color wheel
-    function drawSimpleWheel(canvasId) {
-        const canvas = document.getElementById(canvasId);
-        if (!canvas) return;
-
-        const ctx = canvas.getContext('2d');
-        const centerX = canvas.width / 2;
-        const centerY = canvas.height / 2;
-        const radius = 200;
-
-        // Color palette from document
-        const colors = [
-            { r: 255, g: 219, b: 115 },   // Yellow
-            { r: 238, g: 170, b: 66 },   // Orange
-            { r: 200, g: 96, b: 86 },    // Red/Coral
-            { r: 235, g: 138, b: 173 },  // Pink
-            { r: 173, g: 136, b: 185 },  // Purple
-            { r: 74, g: 157, b: 205 }    // Blue
-        ];
-
-        const slices = 6;
-        const angleStep = (Math.PI * 2) / slices;
-
-        // Draw each slice with radial gradient
-        for (let i = 0; i < slices; i++) {
-            const startAngle = i * angleStep - Math.PI / 2;
-            const endAngle = startAngle + angleStep;
-            const color = colors[i];
-
-            // Create radial gradient
-            const gradient = ctx.createRadialGradient(
-                centerX, centerY, 0,
-                centerX, centerY, radius
-            );
-
-            gradient.addColorStop(0, `rgba(${color.r}, ${color.g}, ${color.b}, 0)`);
-            gradient.addColorStop(0.4, `rgba(${color.r}, ${color.g}, ${color.b}, 0.3)`);
-            gradient.addColorStop(1, `rgba(${color.r}, ${color.g}, ${color.b}, 1)`);
-
-            ctx.beginPath();
-            ctx.moveTo(centerX, centerY);
-            ctx.arc(centerX, centerY, radius, startAngle, endAngle);
-            ctx.closePath();
-
-            ctx.fillStyle = gradient;
-            ctx.fill();
-        }
-    }
-
-    // Helper to create menu
-    function createEmotionMenu(currentSelection, centeredBtn) {
-        // Remove existing menu if any
-        const existingMenu = document.querySelector('.emotion-menu');
-        if (existingMenu) existingMenu.remove();
-
-        const menu = document.createElement('div');
-        menu.classList.add('emotion-menu');
-
-        emotionBtns.forEach(btn => {
-            if (btn.textContent !== currentSelection) {
-                const menuBtn = document.createElement('button');
-                menuBtn.classList.add('emotion-btn');
-                menuBtn.textContent = btn.textContent;
-
-                menuBtn.addEventListener('click', () => {
-                    // Update centered button text
-                    centeredBtn.textContent = menuBtn.textContent;
-
-                    // Re-create menu with new selection
-                    createEmotionMenu(menuBtn.textContent, centeredBtn);
-
-                    // Render new sub-emotions
-                    // We need centerX/centerY. We can get it from centeredBtn position.
-                    // centeredBtn is absolute, so top/left are correct.
-                    // But centeredBtn has transform translate(-50%, -50%).
-                    // So its style.left/top are the center coordinates.
-                    const centerX = parseFloat(centeredBtn.style.left) || 0;
-                    // style.top might have 'px', need to parse.
-                    // Wait, style.left is '50%' initially, but we set it to specific px in animation?
-                    // No, in animation step 5: clone.style.left = '50%'; clone.style.top = `${centerY}px`;
-                    // So left is 50% of viewport width? No, document width.
-                    // Actually, clone.style.left = '50%' means 50% of offsetParent (body).
-                    // So centerX is window.innerWidth / 2.
-                    // centerY is parseFloat(centeredBtn.style.top).
-
-                    const cx = window.innerWidth / 2;
-                    const cy = parseFloat(centeredBtn.style.top);
-
-                    renderSubEmotions(menuBtn.textContent, cx, cy);
-
-                    // Hide menu
-                    menu.classList.remove('visible');
-                });
-
-                menu.appendChild(menuBtn);
-            }
-        });
-
-        document.body.appendChild(menu);
-
-        // Ensure menu has the correct top position (same as centered button)
-        if (centeredBtn && centeredBtn.style.top) {
-            menu.style.top = centeredBtn.style.top;
-        }
-
-        return menu;
-    }
-
-    emotionBtns.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            // 1. Get position of clicked button
-            const rect = btn.getBoundingClientRect();
-            const scrollY = window.scrollY;
-            const viewportHeight = window.innerHeight;
-            const centerY = scrollY + viewportHeight / 2;
-
-            // 2. Create a clone of the button
-            const clone = btn.cloneNode(true);
-
-            // 3. Set initial position and styles for the clone (absolute relative to document)
-            clone.style.left = `${rect.left}px`;
-            clone.style.top = `${rect.top + scrollY}px`;
-            clone.style.width = `${rect.width}px`;
-            clone.style.height = `${rect.height}px`;
-            clone.classList.add('emotion-btn-fixed'); // Add class for absolute positioning and transition
-
-            document.body.appendChild(clone);
-
-            // 3.5 Clone the header to keep it visible
-            if (stepObserveHeader) {
-                const headerRect = stepObserveHeader.getBoundingClientRect();
-                const headerClone = stepObserveHeader.cloneNode(true);
-                headerClone.style.position = 'absolute';
-                headerClone.style.top = `${headerRect.top + scrollY}px`;
-                headerClone.style.left = `${headerRect.left}px`;
-                headerClone.style.width = `${headerRect.width}px`;
-                headerClone.style.margin = '0'; // Reset margin to avoid double spacing if any
-                headerClone.style.zIndex = '2147483647'; // Same max z-index as button
-                document.body.appendChild(headerClone);
-
-                // Hide original header to prevent duplication
-                stepObserveHeader.style.opacity = '0';
-            }
-
-            // 4. Trigger Curtain
-            if (curtain) {
-                curtain.style.display = 'block'; // Make visible
-                curtain.style.top = `${scrollY - viewportHeight}px`; // Start above current viewport
-                curtain.style.height = `${viewportHeight}px`; // Cover only current viewport height
-
-                // Force reflow before adding active class
-                curtain.offsetHeight;
-
-                curtain.classList.add('active');
-
-                // Update active state to move to current scrollY
-                // We need to override the CSS transform or update the CSS logic.
-                // Since CSS has transform: translateY(100vh), and top is (scrollY - viewportHeight),
-                // final position will be scrollY. This works!
-            }
-
-            // 5. Animate Clone to Center (after a slight delay to allow browser to render initial state)
-            requestAnimationFrame(() => {
-                // Force reflow
-                clone.offsetHeight;
-
-                clone.style.top = `${centerY}px`; // Center of current viewport
-                clone.style.left = '50%';
-                clone.style.transform = 'translate(-50%, -50%) scale(2)'; // Center and scale up
-
-                // 6. Show Text and Create Menu after animation
-                setTimeout(() => {
-                    // Allow button to resize for new text
-                    clone.style.width = 'auto';
-                    clone.style.height = 'auto';
-
-                    // Add Text
-                    const text = document.createElement('p');
-                    text.classList.add('emotion-context-text');
-                    text.textContent = 'Let’s go beyond the obvious terms to identify exactly what you are feeling';
-                    text.style.top = `${centerY}px`; // Position relative to center
-                    document.body.appendChild(text);
-
-                    // Fade in text
-                    requestAnimationFrame(() => {
-                        text.style.opacity = '1';
-                    });
-
-                    // Create Menu
-                    const menu = createEmotionMenu(clone.textContent, clone);
-                    menu.style.top = `${centerY}px`; // Position relative to center
-
-                    // Render Sub-emotions
-                    // We need centerX/centerY.
-                    // centerX is window.innerWidth / 2 (since left is 50%)
-                    // centerY is calculated above.
-                    renderSubEmotions(clone.textContent, window.innerWidth / 2, centerY);
-
-                    // Toggle Menu on Clone Click
-                    clone.style.cursor = 'pointer';
-                    clone.addEventListener('click', () => {
-                        const currentMenu = document.querySelector('.emotion-menu');
-                        if (currentMenu) {
-                            currentMenu.classList.toggle('visible');
-                        }
-                    });
-
-                }, 1000); // Wait for transition (1s)
-            });
-        });
-    });
 });
 
 // SoundCloud Player Integration

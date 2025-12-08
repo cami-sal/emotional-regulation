@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hertz Frequencies - Gravity</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <a href="index.html#step-3" class="back-btn hertz-back-btn">
+        <span class="arrow">←</span> Go Back
+    </a>
+
+    <!-- Start Overlay -->
+    <div id="start-overlay">
+        <div class="overlay-content">
+            <button id="start-btn">Start Frequency</button>
+        </div>
+    </div>
+
+    <!-- Page Transition Overlay (Starts active for fade-in effect) -->
+    <div id="page-transition-overlay" class="active"></div>
+
+    <div class="hertz-container">
+        <h1>Hertz Frequencies</h1>
+        <h2>396 Hz — Anxiety Release</h2>
+
+        <!-- Audio Controls -->
+        <div class="hertz-controls">
+            <button id="play-btn" class="control-btn">&#9658;</button>
+            <button id="pause-btn" class="control-btn">&#10074;&#10074;</button>
+        </div>
+
+        <!-- Water Drop Animations (Multiple Sources) -->
+        <div class="water-animation main-water" id="water-1"></div>
+        <div class="water-animation small-water" id="water-2"></div>
+        <div class="water-animation medium-water" id="water-3"></div>
+        <div class="water-animation tiny-water" id="water-4"></div>
+        <div class="water-animation extra-water-1" id="water-5"></div>
+        <div class="water-animation extra-water-2" id="water-6"></div>
+
+    </div>
+
+    <!-- SoundCloud Widget -->
+    <iframe id="sc-player" width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay"
+        src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/musicfromthefirmament/sets/396-hz-solfeggio-frequency-meditation-eliminates-fear&color=%23ff5500&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=false"
+        style="display: none;">
+    </iframe>
+    <script src="https://w.soundcloud.com/player/api.js"></script>
+
+    <script>
+        // Page Transition Logic
+        document.addEventListener('DOMContentLoaded', () => {
+            const overlay = document.getElementById('page-transition-overlay');
+            const startOverlay = document.getElementById('start-overlay');
+            const startBtn = document.getElementById('start-btn');
+            const playBtn = document.getElementById('play-btn');
+            const pauseBtn = document.getElementById('pause-btn');
+            const waterContainers = document.querySelectorAll('.water-animation');
+            let widget;
+            let rippleIntervals = [];
+
+            const iframe = document.getElementById('sc-player');
+
+            // Fade out page transition overlay
+            setTimeout(() => {
+                overlay.classList.remove('active');
+            }, 100);
+
+            // Initialize SC Widget
+            function initWidget() {
+                if (typeof SC !== 'undefined') {
+                    widget = SC.Widget(iframe);
+                } else {
+                    setTimeout(initWidget, 100);
+                }
+            }
+            initWidget();
+
+            // Ripple Generator Logic
+            function spawnRipple(container) {
+                const ripple = document.createElement('div');
+                ripple.classList.add('ripple');
+                container.appendChild(ripple);
+
+                // Remove after animation (4s)
+                setTimeout(() => {
+                    ripple.remove();
+                }, 4000);
+            }
+
+            function startRipples() {
+                if (rippleIntervals.length === 0) {
+                    // Main Water (Steady Pulse)
+                    spawnRipple(waterContainers[0]);
+                    rippleIntervals.push(setInterval(() => spawnRipple(waterContainers[0]), 800));
+
+                    // Small Water (Slower)
+                    rippleIntervals.push(setInterval(() => spawnRipple(waterContainers[1]), 1200));
+
+                    // Medium Water (Very Slow)
+                    rippleIntervals.push(setInterval(() => spawnRipple(waterContainers[2]), 2000));
+
+                    // Tiny Water (Fast Flutter)
+                    rippleIntervals.push(setInterval(() => spawnRipple(waterContainers[3]), 600));
+
+                    // Extra Water 1 (Medium-Slow)
+                    rippleIntervals.push(setInterval(() => spawnRipple(waterContainers[4]), 1500));
+
+                    // Extra Water 2 (Medium-Fast)
+                    rippleIntervals.push(setInterval(() => spawnRipple(waterContainers[5]), 900));
+                }
+            }
+
+            function stopRipples() {
+                rippleIntervals.forEach(interval => clearInterval(interval));
+                rippleIntervals = [];
+            }
+
+            // Start Button (Unlock Audio & Play)
+            startBtn.addEventListener('click', () => {
+                startOverlay.classList.add('hidden');
+                if (widget) {
+                    widget.play();
+                    startRipples();
+                }
+            });
+
+            // Play/Pause Controls
+            playBtn.addEventListener('click', () => {
+                if (widget) {
+                    widget.play();
+                    startRipples();
+                }
+            });
+
+            pauseBtn.addEventListener('click', () => {
+                if (widget) {
+                    widget.pause();
+                    stopRipples();
+                }
+            });
+
+            // Handle Back Button
+            const backBtn = document.querySelector('.back-btn');
+            backBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const target = backBtn.getAttribute('href');
+                overlay.classList.add('active');
+                setTimeout(() => {
+                    window.location.href = target;
+                }, 500);
+            });
+        });
+    </script>
+</body>
+
+</html>

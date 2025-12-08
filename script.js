@@ -88,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Add extra margin (40% more height) to ensure full visibility and spacing with next section
         const gardenHeightWithMargin = gardenHeight * 1.4;
 
-        garden.style.width = `${window.innerWidth}px`; // Container still full width
+        garden.style.width = '100%'; // Use 100% to avoid overflow
         garden.style.height = `${gardenHeightWithMargin}px`;
         spacer.style.height = `${gardenHeightWithMargin}px`;
 
@@ -201,23 +201,40 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Scroll Text Logic
     const words = document.querySelectorAll('.word');
-    const wordPositions = [0.1, 0.3, 0.5, 0.7, 0.85, 0.95];
+
+    // Configuration for word positions
+    // top: Percentage of the section height (0.0 to 1.0)
+    // left: Horizontal position (e.g., '50%' for center)
+    const wordConfig = [
+        { top: 0.13, left: '50%' }, // Growth
+        { top: 0.25, left: '60%' }, // is
+        { top: 0.40, left: '40%' }, // not
+        { top: 0.55, left: '45%' }, // a
+        { top: 0.73, left: '65%' }, // straight
+        { top: 0.90, left: '45%' }  // line
+    ];
 
     function updatePositions() {
         const gardenTop = window.innerHeight * 2.2; // After hero (100vh) + waves (100vh) + margin (20vh)
         dims = updateDimensions(); // Update dims on resize
 
         words.forEach((word, index) => {
-            let relativeTop = wordPositions[index] * dims.height;
+            if (index >= wordConfig.length) return;
 
-            // All words centered
-            word.style.left = '50%';
+            const config = wordConfig[index];
+            let relativeTop = config.top * dims.height;
+
+            // Set horizontal position from config
+            word.style.left = config.left;
+
+            // Remove inline transform to allow CSS animations to take over
+            // The CSS classes (.word:nth-child, .word.visible) already include translateX(-50%)
+            // to center the element relative to its left position.
 
             const absoluteTop = gardenTop + relativeTop;
             word.style.top = `${absoluteTop}px`;
             word.dataset.triggerY = relativeTop;
         });
-
     }
 
     updatePositions();
@@ -329,6 +346,13 @@ document.addEventListener('DOMContentLoaded', () => {
             element.style.transform = `scale(${scale})`;
         });
 
+        // Rotate Visualization Flower on Scroll
+        const visFlower = document.querySelector('.visualization-flower');
+        if (visFlower) {
+            const rotation = currentScroll * 0.15; // Adjust speed as needed
+            visFlower.style.setProperty('--rotation', `${rotation}deg`);
+        }
+
         requestAnimationFrame(handleScroll);
     }
 
@@ -344,11 +368,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Original State Configuration
     const originalState = [
-        { color: 'yellow', opacities: [0.2, 0.36, 0.52, 0.68, 0.84, 1], text: 'some days will be splendid' },
-        { color: 'blue', opacities: [0.2, 0.36, 0.52, 0.68, 0.84, 1], text: 'some days will be sorrowfull' },
-        { color: 'red', opacities: [0.2, 0.36, 0.52, 0.68, 0.84, 1], text: 'some days will be stressfull' },
-        { color: 'green', opacities: [0.2, 0.36, 0.52, 0.68, 0.84, 1], text: 'some days will be satisfying' },
-        { colors: ['blue', 'blue', 'green', 'green', 'red', 'yellow'], opacities: [1, 0.46, 0.82, 0.28, 0.64, 0.1], text: 'most are a mix of everything' }
+        { color: 'yellow', opacities: [0.2, 0.36, 0.52, 0.68, 0.84, 1], text: 'Some days will be splendid<br><span class="korean-text">어떤 날은 눈부시게 빛납니다.</span>' },
+        { color: 'blue', opacities: [0.2, 0.36, 0.52, 0.68, 0.84, 1], text: 'Some days will be sorrowfull<br><span class="korean-text">어떤 날은 슬픔이 찾아옵니다.</span>' },
+        { color: 'red', opacities: [0.2, 0.36, 0.52, 0.68, 0.84, 1], text: 'Some days will be stressfull<br><span class="korean-text">어떤 날은 마음이 지칩니다.</span>' },
+        { color: 'green', opacities: [0.2, 0.36, 0.52, 0.68, 0.84, 1], text: 'Some days will be satisfying<br><span class="korean-text">어떤 날은 깊은 만족이 느껴집니다.</span>' },
+        { colors: ['blue', 'blue', 'green', 'green', 'red', 'yellow'], opacities: [1, 0.46, 0.82, 0.28, 0.64, 0.9], text: 'Most are a mix of everything<br><span class="korean-text">대부분의 날들은 그 모든 감정이 어우러져 있습니다.</span>' }
     ];
 
     // New State Configuration
@@ -356,27 +380,27 @@ document.addEventListener('DOMContentLoaded', () => {
         {
             colors: ['red', 'red', 'blue', 'green', 'yellow', 'yellow'],
             opacities: [0.82, 0.28, 1, 0.46, 0.64, 0.1],
-            text: 'but what you must remember is that'
+            text: 'But what you must remember is that<br><span class="korean-text">하지만 꼭 기억해야 할 것은,</span>'
         },
         {
             colors: ['blue', 'blue', 'red', 'red', 'green', 'green'],
-            opacities: [0.46, 1, 0.64, 0.1, 0.82, 0.28],
-            text: 'no matter how the day unfolds'
+            opacities: [0.2, 0.36, 0.52, 0.68, 0.84, 1],
+            text: 'No matter how the day unfolds<br><span class="korean-text">하루가 어떻게 흘러가든</span>'
         },
         {
             colors: ['green', 'red', 'red', 'yellow', 'yellow', 'blue'],
-            opacities: [1, 0.64, 0.28, 0.82, 0.1, 0.46],
-            text: 'all emotions are valid'
+            opacities: [0.82, 0.28, 1, 0.46, 0.64, 0.1],
+            text: 'All emotions are valid<br><span class="korean-text">모든 감정은 소중합니다.</span>'
         },
         {
             colors: ['yellow', 'yellow', 'blue', 'blue', 'red', 'red'],
-            opacities: [0.64, 0.1, 0.46, 0.82, 1, 0.28],
-            text: 'so embrace them proudly'
+            opacities: [0.2, 0.36, 0.52, 0.68, 0.84, 1],
+            text: 'So embrace them proudly<br><span class="korean-text">그러니 그 감정들을 당당히 안아 주십시오.</span>'
         },
         {
             colors: ['yellow', 'red', 'green', 'blue', 'red', 'yellow'],
-            opacities: [0.28, 0.82, 0.46, 1, 0.64, 0.1],
-            text: 'and find your balance'
+            opacities: [0.82, 0.28, 1, 0.46, 0.64, 0.1],
+            text: 'And find your balance<br><span class="korean-text">그리고 당신만의 균형을 찾아가십시오.</span>'
         }
     ];
 
@@ -408,7 +432,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Update Text with fade effect
             textEl.style.opacity = 0;
             setTimeout(() => {
-                textEl.textContent = config.text;
+                textEl.innerHTML = config.text; // Use innerHTML for <br> and <span>
                 textEl.style.opacity = 1;
             }, 300);
 
@@ -440,7 +464,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Update Text with fade effect
             textEl.style.opacity = 0;
             setTimeout(() => {
-                textEl.textContent = config.text;
+                textEl.innerHTML = config.text; // Use innerHTML for <br>
                 textEl.style.opacity = 1;
             }, 300);
 
@@ -465,6 +489,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 }, 50 * sqIndex); // Stagger each square by 50ms
             });
         });
+    }
+
+    // Apply initial state on load to ensure text is correct (with Korean)
+    if (isTransformed) {
+        applyNewState();
+    } else {
+        applyOriginalState();
     }
 
     handleScroll();
@@ -538,17 +569,27 @@ document.addEventListener('DOMContentLoaded', () => {
     const yellowCircleSmall = document.querySelector('.yellow-circle-small');
     const blueSemicircle = document.querySelector('.blue-semicircle');
     const visualizationText = document.querySelector('.visualization-text');
+    const visualizationFlower = document.querySelector('.visualization-flower');
 
     if (yellowCircleSmall && blueSemicircle) {
         yellowCircleSmall.addEventListener('click', () => {
             yellowCircleSmall.classList.toggle('solved');
             blueSemicircle.classList.toggle('solved');
 
-            if (yellowCircleSmall.classList.contains('solved')) {
-                visualizationText.textContent = 'a problem at a distance feels more solvable';
-            } else {
-                visualizationText.textContent = 'a problem upclose can feel overwhelming';
-            }
+            // Fade out text
+            visualizationText.style.opacity = '0';
+
+            setTimeout(() => {
+                if (yellowCircleSmall.classList.contains('solved')) {
+                    visualizationText.innerHTML = 'A problem at a distance feels more solvable<br><span class="korean-text-large">문제를 멀리서 바라보면 더 쉽게 해결할 수 있습니다.</span>';
+                    if (visualizationFlower) visualizationFlower.classList.add('visible');
+                } else {
+                    visualizationText.innerHTML = 'A problem upclose can feel overwhelming<br><span class="korean-text-large">문제를 가까이에서 마주하면 압도적으로 느껴질 수 있습니다.</span>';
+                    if (visualizationFlower) visualizationFlower.classList.remove('visible');
+                }
+                // Fade in text
+                visualizationText.style.opacity = '1';
+            }, 400); // Wait for fade out transition
         });
     }
 
@@ -846,8 +887,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 continueContainer.style.display = 'none';
             }
 
-            // Show emotion grid
+            // Show emotion grid, title, and footer
             const emotionsGrid = document.getElementById('emotions-grid');
+            const emotionsTitle = document.getElementById('emotions-title');
+            const emotionsFooter = document.getElementById('emotions-footer');
+
+            if (emotionsTitle) {
+                emotionsTitle.classList.remove('hidden');
+                setTimeout(() => {
+                    emotionsTitle.classList.add('visible');
+                }, 100);
+            }
+
+            if (emotionsFooter) {
+                emotionsFooter.classList.remove('hidden');
+                setTimeout(() => {
+                    emotionsFooter.classList.add('visible');
+                }, 1000); // Delay slightly after title/grid start
+            }
+
             if (emotionsGrid) {
                 emotionsGrid.innerHTML = ''; // Clear previous content if any
                 emotionsGrid.classList.remove('hidden');
@@ -955,5 +1013,521 @@ document.addEventListener('DOMContentLoaded', () => {
         widget.bind(SC.Widget.Events.FINISH, () => {
             widget.play();
         });
+
+        // Song Selection
+        const songOptions = document.querySelectorAll('.song-option');
+        songOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                // Remove active class from all
+                songOptions.forEach(opt => opt.classList.remove('active'));
+                // Add to clicked
+                option.classList.add('active');
+
+                const url = option.getAttribute('data-url');
+                // Load new song
+                widget.load(url, {
+                    auto_play: true,
+                    loop: true,
+                    show_artwork: false,
+                    hide_related: true,
+                    show_comments: false,
+                    show_user: false,
+                    show_reposts: false,
+                    show_teaser: false,
+                    visual: false,
+                    color: '#ff5500'
+                });
+
+                // Update control state to playing
+                iconSpan.textContent = '❚❚';
+                textSpan.textContent = 'Pause Music';
+                isPlaying = true;
+                audioControl.classList.add('playing');
+            });
+        });
     }
+    // Pipes Animation for Step 2 (Thin lines)
+    function initPipes() {
+        const canvas = document.getElementById('pipes-canvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+
+        let width, height;
+        const gridSize = 40;
+        const lineWidth = 12; // Thinner lines
+        let pipes = [];
+        let gridState = {}; // Map "x,y" -> { h: bool, v: bool }
+
+        const colors = [
+            'rgba(241, 196, 15, 0.8)',  // Yellow
+            'rgba(233, 30, 99, 0.8)',   // Pink
+            'rgba(52, 152, 219, 0.8)',  // Blue
+            'rgba(46, 204, 113, 0.8)',  // Green
+            'rgba(231, 76, 60, 0.8)',   // Red
+            'rgba(155, 89, 182, 0.8)',  // Purple
+            'rgba(26, 188, 156, 0.8)'   // Teal
+        ];
+
+        function resize() {
+            width = canvas.parentElement.offsetWidth;
+            height = canvas.parentElement.offsetHeight;
+            canvas.width = width;
+            canvas.height = height;
+            gridState = {}; // Reset grid
+            resetPipes();
+        }
+
+        function updateGrid(x, y, orientation, add) {
+            const key = `${x},${y}`;
+            if (!gridState[key]) gridState[key] = { h: 0, v: 0 };
+
+            if (add) {
+                gridState[key][orientation]++;
+            } else {
+                gridState[key][orientation]--;
+                if (gridState[key][orientation] < 0) gridState[key][orientation] = 0;
+            }
+        }
+
+        function isOccupied(x, y, orientation) {
+            const key = `${x},${y}`;
+            if (!gridState[key]) return false;
+            return gridState[key][orientation] > 0;
+        }
+
+        class Pipe {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                // Find a valid starting spot? Or just random and hope
+                this.x = Math.floor(Math.random() * (width / gridSize)) * gridSize;
+                this.y = Math.floor(Math.random() * (height / gridSize)) * gridSize;
+                this.direction = Math.floor(Math.random() * 4);
+                this.segments = [];
+                this.currentSegment = {
+                    startX: this.x,
+                    startY: this.y,
+                    endX: this.x,
+                    endY: this.y,
+                    color: colors[Math.floor(Math.random() * colors.length)]
+                };
+
+                // Mark start pos
+                const orientation = (this.direction === 1 || this.direction === 3) ? 'h' : 'v';
+                updateGrid(this.x, this.y, orientation, true);
+
+                this.dead = false;
+                this.speed = 2;
+                this.progress = 0;
+                this.maxSegments = 8;
+            }
+
+            update() {
+                if (this.dead) return;
+
+                this.progress += this.speed;
+
+                // Update current segment end position visually
+                switch (this.direction) {
+                    case 0: this.currentSegment.endY = this.y - this.progress; break; // Up
+                    case 1: this.currentSegment.endX = this.x + this.progress; break; // Right
+                    case 2: this.currentSegment.endY = this.y + this.progress; break; // Down
+                    case 3: this.currentSegment.endX = this.x - this.progress; break; // Left
+                }
+
+                if (this.progress >= gridSize) {
+                    // Finished a grid step
+
+                    // Update logical position
+                    switch (this.direction) {
+                        case 0: this.y -= gridSize; break;
+                        case 1: this.x += gridSize; break;
+                        case 2: this.y += gridSize; break;
+                        case 3: this.x -= gridSize; break;
+                    }
+
+                    // Snap
+                    this.currentSegment.endX = this.x;
+                    this.currentSegment.endY = this.y;
+
+                    // Mark new cell
+                    const orientation = (this.direction === 1 || this.direction === 3) ? 'h' : 'v';
+                    // Note: We already marked the cell we just entered? 
+                    // No, we marked the previous one. We need to mark the one we just fully entered?
+                    // Actually, it's better to mark AHEAD.
+                    // But for now, let's mark the one we are IN.
+                    updateGrid(this.x, this.y, orientation, true);
+
+                    this.progress = 0;
+
+                    // Logic to choose next move
+                    // We need to check if continuing straight is valid
+                    // And if turning is valid
+
+                    let possibleMoves = [];
+
+                    // Check straight
+                    if (this.isValidMove(this.x, this.y, this.direction)) {
+                        possibleMoves.push(this.direction);
+                        possibleMoves.push(this.direction); // Weight straight higher
+                        possibleMoves.push(this.direction);
+                    }
+
+                    // Check turns
+                    const leftTurn = (this.direction + 3) % 4;
+                    if (this.isValidMove(this.x, this.y, leftTurn)) {
+                        possibleMoves.push(leftTurn);
+                    }
+
+                    const rightTurn = (this.direction + 1) % 4;
+                    if (this.isValidMove(this.x, this.y, rightTurn)) {
+                        possibleMoves.push(rightTurn);
+                    }
+
+                    if (possibleMoves.length === 0) {
+                        this.kill();
+                        return;
+                    }
+
+                    // Pick a move
+                    const nextDir = possibleMoves[Math.floor(Math.random() * possibleMoves.length)];
+
+                    if (nextDir !== this.direction) {
+                        // Turn!
+                        this.direction = nextDir;
+
+                        // Push finished segment
+                        this.segments.push(this.currentSegment);
+
+                        // Prune old segments
+                        if (this.segments.length > this.maxSegments) {
+                            const removed = this.segments.shift();
+                            this.unmarkSegment(removed);
+                        }
+
+                        // Start new segment
+                        this.currentSegment = {
+                            startX: this.x,
+                            startY: this.y,
+                            endX: this.x,
+                            endY: this.y,
+                            color: colors[Math.floor(Math.random() * colors.length)]
+                        };
+                    } else {
+                        // Continue straight - check if we should force a turn for variety?
+                        // Or just let the weighting handle it.
+                        // But we need to check if we are forced to turn because straight was blocked (but turns weren't)
+                        // The logic above handles picking a valid move.
+                    }
+
+                    // Check bounds (redundant with isValidMove but good for safety)
+                    if (this.x < -gridSize || this.x > width + gridSize || this.y < -gridSize || this.y > height + gridSize) {
+                        this.kill();
+                    }
+                }
+            }
+
+            isValidMove(cx, cy, dir) {
+                let nx = cx;
+                let ny = cy;
+                switch (dir) {
+                    case 0: ny -= gridSize; break;
+                    case 1: nx += gridSize; break;
+                    case 2: ny += gridSize; break;
+                    case 3: nx -= gridSize; break;
+                }
+
+                // Bounds check
+                if (nx < 0 || nx >= width || ny < 0 || ny >= height) return false;
+
+                // Occupancy check
+                const orientation = (dir === 1 || dir === 3) ? 'h' : 'v';
+                if (isOccupied(nx, ny, orientation)) return false;
+
+                return true;
+            }
+
+            unmarkSegment(seg) {
+                // Walk from start to end and unmark
+                let cx = seg.startX;
+                let cy = seg.startY;
+                const dx = Math.sign(seg.endX - seg.startX) * gridSize;
+                const dy = Math.sign(seg.endY - seg.startY) * gridSize;
+
+                // Determine orientation
+                const orientation = (dx !== 0) ? 'h' : 'v';
+
+                // We need to unmark the cells covered.
+                // Start cell is already covered by previous segment end? 
+                // Segments share joints.
+                // Let's unmark inclusive of start, exclusive of end? Or...
+                // The grid logic: each cell visited is marked.
+                // A segment from (0,0) to (0, 100) covers multiple cells.
+                // My segments are defined by start/end points which are grid coordinates.
+
+                const steps = Math.max(Math.abs(seg.endX - seg.startX), Math.abs(seg.endY - seg.startY)) / gridSize;
+
+                // Unmark start
+                updateGrid(cx, cy, orientation, false);
+
+                for (let i = 0; i < steps; i++) {
+                    cx += dx;
+                    cy += dy;
+                    updateGrid(cx, cy, orientation, false);
+                }
+            }
+
+            kill() {
+                this.dead = true;
+                // Unmark all
+                this.unmarkSegment(this.currentSegment); // Unmark current progress? 
+                // Current segment might be partially drawn, but logically we marked the head.
+                // Actually, we marked the head cell in `reset` or `update`.
+                // We need to be careful.
+                // Let's just unmark everything in segments + current head.
+
+                this.segments.forEach(s => this.unmarkSegment(s));
+
+                // Unmark the head's current position if not in segments
+                // The head position is tracked by x,y.
+                // We marked it when we entered it.
+                const orientation = (this.direction === 1 || this.direction === 3) ? 'h' : 'v';
+                updateGrid(this.x, this.y, orientation, false);
+
+                setTimeout(() => this.reset(), 1000);
+            }
+
+            draw(ctx) {
+                ctx.lineWidth = lineWidth;
+
+                // Draw finished segments
+                this.segments.forEach(seg => {
+                    ctx.beginPath();
+                    ctx.strokeStyle = seg.color;
+                    ctx.moveTo(seg.startX + gridSize / 2, seg.startY + gridSize / 2);
+                    ctx.lineTo(seg.endX + gridSize / 2, seg.endY + gridSize / 2);
+                    ctx.stroke();
+                });
+
+                // Draw current segment
+                ctx.beginPath();
+                ctx.strokeStyle = this.currentSegment.color;
+                ctx.moveTo(this.currentSegment.startX + gridSize / 2, this.currentSegment.startY + gridSize / 2);
+                ctx.lineTo(this.currentSegment.endX + gridSize / 2, this.currentSegment.endY + gridSize / 2);
+                ctx.stroke();
+            }
+        }
+
+        function resetPipes() {
+            pipes = [];
+            for (let i = 0; i < 12; i++) {
+                pipes.push(new Pipe());
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+
+            ctx.globalCompositeOperation = 'multiply';
+            ctx.lineCap = 'square';
+
+            pipes.forEach(pipe => {
+                pipe.update();
+                pipe.draw(ctx);
+            });
+
+            ctx.globalCompositeOperation = 'source-over';
+
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', resize);
+        resize();
+        animate();
+    }
+
+    // Play button scroll functionality
+    const playBtn = document.querySelector('.hero-play-btn');
+    if (playBtn) {
+        playBtn.addEventListener('click', () => {
+            const soundWavesSection = document.getElementById('sound-waves');
+            if (soundWavesSection) {
+                soundWavesSection.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+    }
+
+    initPipes();
+
+    // Snake Animation for Final Message
+    function initSnake() {
+        const canvas = document.getElementById('snake-canvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+
+        // Colors from the website theme
+        const colors = [
+            'rgba(255, 219, 115, 0.8)', // #ffdb73 Yellow
+            'rgba(74, 157, 205, 0.8)',  // #4a9dcd Blue
+            'rgba(200, 96, 86, 0.8)',   // #c86056 Red
+            'rgba(109, 181, 160, 0.8)', // #6db5a0 Green
+            'rgba(173, 136, 185, 0.8)'  // #ad88b9 Purple
+        ];
+
+        function resize() {
+            // Set canvas size to match container
+            const container = canvas.parentElement;
+            canvas.width = container.offsetWidth;
+            canvas.height = container.offsetHeight;
+            drawSnake();
+        }
+
+        function drawSnake() {
+            const width = canvas.width;
+            const height = canvas.height;
+            ctx.clearRect(0, 0, width, height);
+
+            const circleRadius = 25;
+            const spacing = 30;
+            const rows = 6;
+            const rowHeight = height / rows;
+            const margin = 100;
+
+            // Define path segments
+            let segments = [];
+
+            for (let i = 0; i < rows; i++) {
+                const y = i * rowHeight + rowHeight / 2;
+                const isRight = i % 2 === 0;
+
+                // Straight line segment
+                const startX = isRight ? margin : width - margin;
+                const endX = isRight ? width - margin : margin;
+
+                segments.push({
+                    type: 'line',
+                    start: { x: startX, y: y },
+                    end: { x: endX, y: y },
+                    length: Math.abs(endX - startX)
+                });
+
+                // Curve segment (if not last row)
+                if (i < rows - 1) {
+                    const nextY = (i + 1) * rowHeight + rowHeight / 2;
+                    const cx = isRight ? width - margin : margin;
+                    const cy = (y + nextY) / 2;
+                    const radius = (nextY - y) / 2;
+
+                    // Right curve: -PI/2 to PI/2
+                    // Left curve: 3PI/2 to PI/2 (decreasing)
+                    const startAngle = isRight ? -Math.PI / 2 : 1.5 * Math.PI;
+                    const endAngle = isRight ? Math.PI / 2 : 0.5 * Math.PI;
+                    const isCounterClockwise = !isRight; // Left curve goes 270 -> 90 (down via left) which is CCW? 
+                    // Wait. 270 (Top) -> 90 (Bottom). 
+                    // 270 is 3PI/2. 90 is PI/2.
+                    // CCW: 270 -> 180 -> 90. Yes.
+
+                    segments.push({
+                        type: 'arc',
+                        cx: cx,
+                        cy: cy,
+                        radius: radius,
+                        startAngle: startAngle,
+                        endAngle: endAngle,
+                        isCCW: !isRight,
+                        length: Math.PI * radius
+                    });
+                }
+            }
+
+            // Walk the path
+            let totalLength = segments.reduce((acc, seg) => acc + seg.length, 0);
+            let currentDist = 0;
+            let points = [];
+
+            // We want points at intervals of 'spacing'
+            // We can iterate through segments
+
+            let distanceCovered = 0;
+
+            segments.forEach(seg => {
+                // How many points fit in this segment starting from current offset?
+                // We need to track "distance into current segment" vs "global distance"
+                // Actually, just step along.
+
+                // But simpler: just walk the segment.
+                // We need to carry over remainder from previous segment?
+                // Yes, to ensure perfect spacing.
+
+                // Let's just generate points for the segment based on global steps?
+                // No, that's hard.
+                // Let's just walk.
+            });
+
+            // Better approach:
+            // Iterate d from 0 to totalLength step spacing
+            for (let d = 0; d <= totalLength; d += spacing) {
+                // Find which segment contains d
+                let localD = d;
+                for (let seg of segments) {
+                    if (localD <= seg.length) {
+                        // Point is in this segment at localD
+                        if (seg.type === 'line') {
+                            // Interpolate line
+                            const t = localD / seg.length;
+                            points.push({
+                                x: seg.start.x + (seg.end.x - seg.start.x) * t,
+                                y: seg.start.y + (seg.end.y - seg.start.y) * t
+                            });
+                        } else {
+                            // Interpolate arc
+                            // Angle interpolation
+                            // If CCW, angle decreases? Or we handle logic.
+                            // startAngle to endAngle.
+                            // If isCCW, we might need to handle wrap around?
+                            // My angles: Right: -PI/2 to PI/2. Diff PI.
+                            // Left: 3PI/2 to PI/2. Diff -PI.
+
+                            const totalAngle = seg.endAngle - seg.startAngle;
+                            // Check wrap? No, defined simply.
+
+                            const t = localD / seg.length;
+                            const currentAngle = seg.startAngle + totalAngle * t;
+
+                            points.push({
+                                x: seg.cx + seg.radius * Math.cos(currentAngle),
+                                y: seg.cy + seg.radius * Math.sin(currentAngle)
+                            });
+                        }
+                        break;
+                    } else {
+                        localD -= seg.length;
+                    }
+                }
+            }
+
+            // Draw circles
+            points.forEach((p, index) => {
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, circleRadius, 0, Math.PI * 2);
+                ctx.fillStyle = colors[index % colors.length];
+                ctx.fill();
+            });
+        }
+
+        window.addEventListener('resize', resize);
+        resize();
+    }
+
+    initSnake();
+
+    // Flip Card Interaction
+    const flipCards = document.querySelectorAll('.gradient-circle');
+    flipCards.forEach(card => {
+        card.addEventListener('click', () => {
+            card.classList.toggle('flipped');
+        });
+    });
 });

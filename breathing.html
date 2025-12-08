@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Breathing Meditation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <a href="index.html#step-3" class="back-btn">
+        <span class="arrow">←</span> Go Back
+    </a>
+
+    <!-- Audio Player Controls -->
+    <div class="audio-wrapper">
+        <div id="audio-control" class="audio-control">
+            <span class="icon">♫</span>
+            <span class="text">Play Music</span>
+        </div>
+        <div class="song-options">
+            <div class="song-option active"
+                data-url="https://soundcloud.com/relaxingmusicok/lost-in-clouds-paul-landry">
+                <span class="song-title">Lost In Clouds</span>
+                <span class="song-author">Paul Landry</span>
+            </div>
+            <div class="song-option" data-url="https://soundcloud.com/ambientguitarmusic/blue-2">
+                <span class="song-title">Blue II</span>
+                <span class="song-author">Paul Landry</span>
+            </div>
+            <div class="song-option" data-url="https://soundcloud.com/relaxingmusicok/scandinavia_1">
+                <span class="song-title">Scandinavia</span>
+                <span class="song-author">Paul Landry</span>
+            </div>
+            <!-- Volume Slider -->
+            <div class="volume-control">
+                <span class="vol-icon">🔊</span>
+                <input type="range" id="volume-slider" min="0" max="100" value="50">
+            </div>
+        </div>
+    </div>
+
+    <!-- SoundCloud Widget -->
+    <iframe id="sc-player" width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay"
+        src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/relaxingmusicok/lost-in-clouds-paul-landry&color=%23ff5500&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=false&loop=true"
+        style="display: none;">
+    </iframe>
+    <script src="https://w.soundcloud.com/player/api.js"></script>
+
+    <div class="breathing-container">
+        <!-- Background Stars -->
+        <div class="background-stars">
+            <svg class="star star-1" viewBox="0 0 100 100">
+                <path d="M 50 0 C 60 40 100 50 100 50 C 60 60 50 100 50 100 C 40 60 0 50 0 50 C 40 40 50 0 50 0 Z"
+                    fill="#ad8cb9" opacity="0.4" />
+            </svg>
+            <svg class="star star-2" viewBox="0 0 100 100">
+                <path d="M 50 0 C 60 40 100 50 100 50 C 60 60 50 100 50 100 C 40 60 0 50 0 50 C 40 40 50 0 50 0 Z"
+                    fill="#4a9dcd" opacity="0.3" />
+            </svg>
+            <svg class="star star-3" viewBox="0 0 100 100">
+                <path d="M 50 0 C 60 40 100 50 100 50 C 60 60 50 100 50 100 C 40 60 0 50 0 50 C 40 40 50 0 50 0 Z"
+                    fill="#eeaa42" opacity="0.3" />
+            </svg>
+            <svg class="star star-4" viewBox="0 0 100 100">
+                <path d="M 50 0 C 60 40 100 50 100 50 C 60 60 50 100 50 100 C 40 60 0 50 0 50 C 40 40 50 0 50 0 Z"
+                    fill="#eba0ad" opacity="0.4" />
+            </svg>
+            <svg class="star star-5" viewBox="0 0 100 100">
+                <path d="M 50 0 C 60 40 100 50 100 50 C 60 60 50 100 50 100 C 40 60 0 50 0 50 C 40 40 50 0 50 0 Z"
+                    fill="#ad8cb9" opacity="0.2" />
+            </svg>
+        </div>
+
+        <h1>Breathing Meditation</h1>
+
+        <div class="meditations-wrapper">
+            <!-- Box Breathing -->
+            <div class="box-wrapper">
+                <div class="center-content">
+                    <div class="circle-text" id="box-text">Inhale</div>
+                    <div class="progress-dots" id="progress-dots">
+                        <span class="dot"></span>
+                        <span class="dot"></span>
+                        <span class="dot"></span>
+                        <span class="dot"></span>
+                    </div>
+                </div>
+                <svg class="box-svg" viewBox="0 0 400 400">
+                    <defs>
+                        <linearGradient id="boxGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#4a9dcd;stop-opacity:1" />
+                            <stop offset="33%" style="stop-color:#ad8cb9;stop-opacity:1" />
+                            <stop offset="66%" style="stop-color:#eeaa42;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#eba0ad;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+
+                    <!-- Box Path (Drawing Effect) -->
+                    <!-- Rounded Rect: x=50, y=50, w=300, h=300, r=30 -->
+                    <!-- Path Length ~ 1150 -->
+                    <path id="box-path"
+                        d="M 50 320 L 50 80 A 30 30 0 0 1 80 50 L 320 50 A 30 30 0 0 1 350 80 L 350 320 A 30 30 0 0 1 320 350 L 80 350 A 30 30 0 0 1 50 320 Z"
+                        fill="none" stroke="url(#boxGradient)" stroke-width="20" stroke-linecap="round"
+                        stroke-linejoin="round" stroke-dasharray="1150 1150" stroke-dashoffset="1150">
+                        <!-- 
+                           Cycle 1 (0-16s): 1150 -> 0 (Draws the line)
+                           Cycle 2 (16-32s): 0 -> -1150 (Erases the line from the tail)
+                        -->
+                        <animate id="path-anim" attributeName="stroke-dashoffset" values="1150; 0; -1150"
+                            keyTimes="0; 0.5; 1" dur="32s" begin="indefinite" repeatCount="indefinite"
+                            calcMode="linear" />
+                    </path>
+
+                    <!-- Motion Path (Invisible guide - Offset Outside) -->
+                    <!-- Offset by 25px (10 half-stroke + 15 radius) -->
+                    <!-- New r = 30 + 25 = 55 -->
+                    <path id="box-motion-path"
+                        d="M 25 320 L 25 80 A 55 55 0 0 1 80 25 L 320 25 A 55 55 0 0 1 375 80 L 375 320 A 55 55 0 0 1 320 375 L 80 375 A 55 55 0 0 1 25 320 Z"
+                        fill="none" stroke="none" />
+
+                    <circle id="box-circle" r="15" fill="#3c4b5f">
+                        <animateMotion id="box-anim" begin="indefinite" dur="16s" repeatCount="indefinite"
+                            calcMode="linear">
+                            <mpath href="#box-motion-path" />
+                        </animateMotion>
+                    </circle>
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <!-- Start Overlay -->
+    <div id="start-overlay" class="active">
+        <button id="start-btn">Start Meditation</button>
+    </div>
+
+    <!-- Page Transition Overlay (Starts active for fade-in effect) -->
+    <div id="page-transition-overlay" class="active"></div>
+
+    <script src="breathing.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const overlay = document.getElementById('page-transition-overlay');
+            const backBtn = document.querySelector('.back-btn');
+
+            // Fade out overlay on load (smooth entry)
+            if (overlay) {
+                // Small delay to ensure render
+                setTimeout(() => {
+                    overlay.classList.remove('active');
+                }, 100);
+            }
+
+            // Smooth exit on back button click
+            if (backBtn && overlay) {
+                backBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetUrl = backBtn.getAttribute('href');
+
+                    overlay.classList.add('active');
+
+                    setTimeout(() => {
+                        window.location.href = targetUrl;
+                    }, 800); // Match CSS duration
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

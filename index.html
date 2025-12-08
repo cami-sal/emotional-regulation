@@ -12,11 +12,28 @@
 </head>
 
 <body>
-    <div id="audio-control" class="audio-control">
-        <span class="icon">♫</span>
-        <span class="text">Play Music</span>
+    <div class="audio-wrapper">
+        <div id="audio-control" class="audio-control">
+            <span class="icon">♫</span>
+            <span class="text">Play Music</span>
+        </div>
+        <div class="song-options">
+            <div class="song-option active"
+                data-url="https://soundcloud.com/relaxingmusicok/lost-in-clouds-paul-landry">
+                <span class="song-title">Lost In Clouds</span>
+                <span class="song-author">Paul Landry</span>
+            </div>
+            <div class="song-option" data-url="https://soundcloud.com/ambientguitarmusic/blue-2">
+                <span class="song-title">Blue II</span>
+                <span class="song-author">Paul Landry</span>
+            </div>
+            <div class="song-option" data-url="https://soundcloud.com/relaxingmusicok/scandinavia_1">
+                <span class="song-title">Scandinavia</span>
+                <span class="song-author">Paul Landry</span>
+            </div>
+        </div>
     </div>
-    <a href="#regulation-explanation" class="skip-btn">Skip to regulation tools</a>
+    <a href="#step-3" class="skip-btn">Skip to regulation tools</a>
     <iframe id="sc-player" width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay"
         src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/relaxingmusicok/lost-in-clouds-paul-landry&color=%23ff5500&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=false&loop=true"
         style="display: none;">
@@ -87,7 +104,8 @@
                         <div class="square square-yellow" style="opacity: 0.84;"></div>
                         <div class="square square-yellow" style="opacity: 1;"></div>
                     </div>
-                    <p class="row-text">some days will be splendid</p>
+                    <p class="row-text">Some days will be splendid<br><span class="korean-text">어떤 날은 눈부시게 빛납니다.</span>
+                    </p>
                 </div>
                 <div class="opacity-squares">
                     <div class="squares-row">
@@ -98,7 +116,8 @@
                         <div class="square square-blue" style="opacity: 0.84;"></div>
                         <div class="square square-blue" style="opacity: 1;"></div>
                     </div>
-                    <p class="row-text">some days will be sorrowfull</p>
+                    <p class="row-text">Some days will be sorrowfull<br><span class="korean-text">어떤 날은 슬픔이
+                            찾아옵니다.</span></p>
                 </div>
                 <div class="opacity-squares">
                     <div class="squares-row">
@@ -109,7 +128,8 @@
                         <div class="square square-red" style="opacity: 0.84;"></div>
                         <div class="square square-red" style="opacity: 1;"></div>
                     </div>
-                    <p class="row-text">some days will be stressfull</p>
+                    <p class="row-text">Some days will be stressfull<br><span class="korean-text">어떤 날은 마음이 지칩니다.</span>
+                    </p>
                 </div>
                 <div class="opacity-squares">
                     <div class="squares-row">
@@ -120,7 +140,8 @@
                         <div class="square square-green" style="opacity: 0.84;"></div>
                         <div class="square square-green" style="opacity: 1;"></div>
                     </div>
-                    <p class="row-text">some days will be satisfying</p>
+                    <p class="row-text">Some days will be satisfying<br><span class="korean-text">어떤 날은 깊은 만족이
+                            느껴집니다.</span></p>
                 </div>
                 <div class="opacity-squares">
                     <div class="squares-row">
@@ -131,7 +152,8 @@
                         <div class="square square-red" style="opacity: 0.64;"></div>
                         <div class="square square-yellow" style="opacity: 0.1;"></div>
                     </div>
-                    <p class="row-text">most are a mix of everything</p>
+                    <p class="row-text">Most are a mix of everything<br><span class="korean-text">대부분의 날들은 그 모든 감정이 어우러져
+                            있습니다.</span></p>
                 </div>
             </div>
         </section>
@@ -139,12 +161,22 @@
         <section id="regulation-explanation">
             <div class="regulation-content">
                 <p>Emotional regulation is not about suppressing or ceasing to feel emotions. It is about managing how
-                    we react to them and what we do with the information they provide.</p>
+                    we react to them and what we do with the information they provide.
+                    <span class="korean-text-large">감정 조절은 감정을 억누르거나 느끼지 않으려는 것이 아닙니다. 감정이 주는 정보를 어떻게 받아들이고, 그에 어떻게
+                        반응하느냐를 다스리는 것입니다.</span>
+                </p>
             </div>
+            <!-- Floating Leaves -->
+            <img src="flower graphs/newgrowth/darkgreenleaf.svg" class="floating-leaf leaf-1" alt="Leaf">
+            <img src="flower graphs/newgrowth/orangeleaf.svg" class="floating-leaf leaf-2" alt="Leaf">
+            <img src="flower graphs/newgrowth/lightgreenleaf.svg" class="floating-leaf leaf-3" alt="Leaf">
+            <img src="flower graphs/newgrowth/orangeleaf.svg" class="floating-leaf leaf-4" alt="Leaf">
         </section>
 
         <section id="circles-grid">
-            <h2 class="circles-text">Thoughts when you are immersed in them</h2>
+            <h2 class="circles-text">Thoughts when you are immersed in them
+                <span class="korean-text-header">생각 속에 깊이 빠져 있을 때의 생각들</span>
+            </h2>
             <div class="grid-container">
                 <!-- Row 1 -->
                 <div class="circle circle-yellow"></div>
@@ -168,7 +200,9 @@
                 <div class="circle circle-purple"></div>
             </div>
             <div class="observing-container">
-                <h2 class="circles-text-below">Thoughts when you are <strong>observing</strong> them</h2>
+                <h2 class="circles-text-below">Thoughts when you are <strong>observing</strong> them
+                    <span class="korean-text-header">생각을 한 발 물러서서 바라볼 때의 생각들</span>
+                </h2>
                 <button class="restart-circles-btn" aria-label="Restart interaction">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M1 4V10H7" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -183,29 +217,74 @@
 
         <section id="regulation-practice">
             <header class="regulation-practice-header">
-                <h1>You can observe your thoughts and emotions by practicing Emotional Regulation</h1>
+                <h1>You can observe your thoughts and emotions<br>by practicing Emotional Regulation
+                    <span class="korean-text-header">감정 조절을 연습하면 당신은 자신의 생각과 감정을 더 선명하게 바라볼 수 있습니다.</span>
+                </h1>
             </header>
             <div class="gradient-circles-container">
                 <div class="gradient-circle gradient-circle-blue">
-                    <h3 class="circle-title">Proactively</h3>
-                    <p class="circle-body">As a regular habit in calm moments</p>
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <h3 class="circle-title">Proactively</h3>
+                            <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="5"></circle>
+                                <line x1="12" y1="1" x2="12" y2="3"></line>
+                                <line x1="12" y1="21" x2="12" y2="23"></line>
+                                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                                <line x1="1" y1="12" x2="3" y2="12"></line>
+                                <line x1="21" y1="12" x2="23" y2="12"></line>
+                                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                            </svg>
+                        </div>
+                        <div class="flip-card-back">
+                            <p class="circle-body">As a regular habit in calm moments
+                                <br><span class="korean-text-large">평온한 순간에 규칙적인<br>습관으로</span>
+                            </p>
+                        </div>
+                    </div>
                 </div>
                 <div class="gradient-circle gradient-circle-orange">
-                    <h3 class="circle-title">Reactively</h3>
-                    <p class="circle-body">In situations where you feel strong emotions, stress, or the urge to act
-                        impulsively.</p>
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <h3 class="circle-title">Reactively</h3>
+                            <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                            </svg>
+                        </div>
+                        <div class="flip-card-back">
+                            <p class="circle-body" style="font-size: 1.5rem;">In situations where you feel strong
+                                emotions, stress, or the urge to
+                                act impulsively.
+                                <br><span class="korean-text-large" style="font-size: 0.8em;">강한 감정이나 스트레스를
+                                    느끼거나<br>충동적으로 행동하고 싶을 때</span>
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
 
         <section id="practice-emotions">
             <header class="practice-emotions-header">
-                <h1>Here, we will practice how to regulate our emotions in difficult situations</h1>
+                <h1>Now we will practice how to regulate our emotions in difficult situations
+                    <span class="korean-text-header">이제 어려운 상황에서 감정을 조절하는 방법을 함께 연습해 보겠습니다.</span>
+                </h1>
             </header>
             <div class="problem-visualization">
-                <div class="blue-semicircle"></div>
-                <div class="yellow-circle-small"></div>
-                <p class="visualization-text">a problem upclose can feel overwhelming</p>
+                <div class="circles-wrapper">
+                    <div class="blue-semicircle"></div>
+                    <div class="yellow-circle-small">
+                        <div class="yellow-circle-halo"></div>
+                    </div>
+                </div>
+                <p class="visualization-text">A problem upclose can feel overwhelming
+                    <br><span class="korean-text-large">문제를 가까이에서 마주하면 압도적으로 느껴질 수 있습니다.</span>
+                </p>
+                <img src="flower graphs/newgrowth/blueflower.svg" class="visualization-flower" alt="Blue Flower">
             </div>
         </section>
 
@@ -213,12 +292,44 @@
             <header class="how-it-works-header">
                 <h1>How does it work</h1>
             </header>
-            <div class="how-it-works-content">
-                <div class="small-purple-circle"></div>
-                <div class="text-group">
-                    <p class="feeling-text">A feeling arises</p>
-                    <p class="instruction-text">Touch the circle</p>
-                </div>
+            <p class="how-it-works-text">When a feeling arises, if you fight it it will persist. However, if you observe
+                it, it will pass by calmly.
+                <br>
+                <span class="korean-text-large">어떤 감정이 올라올 때 그것과 싸우면 오히려 더 오래 머뭅니다. 그러나 그 감정을 바라보면, 그 감정은 조용히 지나가게
+                    됩니다.</span>
+            </p>
+
+            <div class="waves-lines-container">
+                <svg class="waves-svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                    viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+                    <defs>
+                        <path id="gentle-wave"
+                            d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+                    </defs>
+                    <g class="parallax">
+                        <use xlink:href="#gentle-wave" x="48" y="0" fill="none" stroke="rgba(74, 157, 205, 0.3)"
+                            stroke-width="1.5" />
+                        <use xlink:href="#gentle-wave" x="48" y="3" fill="none" stroke="rgba(60, 75, 95, 0.3)"
+                            stroke-width="1.5" />
+                        <use xlink:href="#gentle-wave" x="48" y="5" fill="none" stroke="rgba(74, 157, 205, 0.5)"
+                            stroke-width="1.5" />
+                        <use xlink:href="#gentle-wave" x="48" y="7" fill="none" stroke="rgba(60, 75, 95, 0.8)"
+                            stroke-width="1.5" />
+                    </g>
+                </svg>
+                <!-- Floating Circles -->
+                <div class="wave-floating-circle circle-yellow size-s"
+                    style="top: 60%; animation-delay: 0s; animation-duration: 20s;"></div>
+                <div class="wave-floating-circle circle-blue size-m"
+                    style="top: 40%; animation-delay: -2s; animation-duration: 25s;"></div>
+                <div class="wave-floating-circle circle-red size-s"
+                    style="top: 65%; animation-delay: -5s; animation-duration: 30s;"></div>
+                <div class="wave-floating-circle circle-green size-l"
+                    style="top: 50%; animation-delay: -8s; animation-duration: 15s;"></div>
+                <div class="wave-floating-circle circle-purple size-m"
+                    style="top: 30%; animation-delay: -3s; animation-duration: 15s;"></div>
+                <div class="wave-floating-circle circle-yellow size-s"
+                    style="top: 70%; animation-delay: -10s; animation-duration: 25s;"></div>
             </div>
         </section>
 
@@ -277,8 +388,102 @@
                     <p class="continue-text">Take a few seconds to think and then continue</p>
                     <button id="continue-btn" class="continue-btn">Continue</button>
                 </div>
+                <h3 id="emotions-title" class="emotions-title hidden">How does it make you feel?</h3>
                 <div id="emotions-grid" class="emotions-grid hidden"></div>
+                <h2 id="emotions-footer" class="subsection-title hidden" style="margin-top: 4rem; font-size: 2rem;">Once
+                    we name our emotions,<br>we begin to truly feel them</h2>
 
+            </div>
+        </section>
+
+        <!-- Step 2 Section -->
+        <section id="step-2">
+            <header class="step-header">
+                <h1>Step 2: Validate</h1>
+            </header>
+            <h2 class="subsection-title">Don’t judge the emotion, embrace it</h2>
+            <div class="pipes-container">
+                <canvas id="pipes-canvas"></canvas>
+            </div>
+            <p class="signals-text">Emotions are signals that point you in the right direction</p>
+        </section>
+
+        <!-- Step 3 Section -->
+        <section id="step-3">
+            <header class="step-header">
+                <h1>Step 3: Regulate</h1>
+            </header>
+            <h2 class="subsection-title">Now that you named the emotion,<br>let's calm things down</h2>
+            <div class="regulate-options">
+                <a href="breathing.html" class="regulate-btn" id="btn-breathing"
+                    style="text-decoration: none; display: inline-block;">Breathing Meditation</a>
+                <a href="hertz.html" class="regulate-btn" id="btn-hertz"
+                    style="text-decoration: none; display: inline-block;">Hertz Frequencies</a>
+            </div>
+        </section>
+
+        <!-- Step 4 Section -->
+        <section id="step-4">
+            <header class="step-header">
+                <h1>Step 4: Integrate</h1>
+            </header>
+            <h2 class="subsection-title">Choose the right strategy for you,<br>and try to turn it into a habit</h2>
+
+            <div class="integration-diagram">
+                <!-- Row 1 -->
+                <div class="integration-row">
+                    <div class="visual-bar connected">
+                        <div class="block grey"></div>
+                        <div class="block red long"></div>
+                    </div>
+                    <p class="integration-text">At first, we can have big emotional reactions</p>
+                </div>
+
+                <!-- Row 2 -->
+                <div class="integration-row">
+                    <div class="visual-bar separated">
+                        <div class="block grey"></div>
+                        <div class="block red short"></div>
+                    </div>
+                    <p class="integration-text">If we learn to stop, pause and breathe</p>
+                </div>
+
+                <!-- Row 3 -->
+                <div class="integration-row">
+                    <div class="visual-bar separated">
+                        <div class="block grey"></div>
+                        <div class="block blue short"></div>
+                    </div>
+                    <p class="integration-text">We can choose a different response</p>
+                </div>
+
+                <!-- Row 4 -->
+                <div class="integration-row">
+                    <div class="visual-bar connected">
+                        <div class="block grey"></div>
+                        <div class="block blue long"></div>
+                    </div>
+                    <p class="integration-text">And with time, it will become our new instinct</p>
+                </div>
+            </div>
+
+            <div class="finish-container">
+                <p class="dont-give-up-text">Don't give up</p>
+            </div>
+        </section>
+
+        <!-- Final Message Section -->
+        <section id="final-message">
+            <div class="snake-container">
+                <canvas id="snake-canvas"></canvas>
+                <div class="snake-text-container">
+                    <p class="snake-text">today you will feel many feelings</p>
+                    <p class="snake-text">notice them</p>
+                    <p class="snake-text">be curious about them</p>
+                    <p class="snake-text">seek the wisdom in them</p>
+                    <p class="snake-text">treat them with kindness</p>
+                    <p class="snake-text">remember they are temporary</p>
+                </div>
             </div>
         </section>
 
@@ -286,6 +491,48 @@
     <div id="curtain"></div>
     <script src="script.js"></script>
     <script src="waves.js"></script>
+    <!-- Page Transition Overlay -->
+    <div id="page-transition-overlay"></div>
+
+    <script>
+        // Smooth transition for Breathing Meditation button
+        document.addEventListener('DOMContentLoaded', () => {
+            const breathingBtn = document.getElementById('btn-breathing');
+            const overlay = document.getElementById('page-transition-overlay');
+
+            if (breathingBtn && overlay) {
+                breathingBtn.addEventListener('click', (e) => {
+                    e.preventDefault(); // Prevent immediate navigation
+                    const targetUrl = breathingBtn.getAttribute('href');
+
+                    // Fade in overlay
+                    overlay.classList.add('active');
+
+                    // Wait for transition then navigate
+                    setTimeout(() => {
+                        window.location.href = targetUrl;
+                    }, 800); // Match CSS transition duration
+                });
+            }
+
+            // Fade out on load (if coming back)
+            if (overlay) {
+                // Check if we need to fade out (e.g. if we just navigated here)
+                // For index.html, we might want it to just be transparent initially, 
+                // but if we want a smooth entry FROM breathing.html, we can check referrer or just always fade out if active?
+                // Actually, the overlay is opacity: 0 by default in CSS.
+                // So on normal load it's invisible.
+                // If we want to fade IN from white when returning, we'd need it to be active initially.
+                // But let's keep it simple: just fade OUT when leaving.
+
+                // However, for consistency, let's handle the "back" transition too.
+                // If we want smooth entry, we should start with active class and remove it.
+                // But that might flash white on reload.
+                // Let's stick to the user request: "transition WHEN I CLICK ... button".
+                // So fade out on exit is the priority.
+            }
+        });
+    </script>
 </body>
 
 </html>

@@ -1,76 +1,323 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Box Breathing Logic
-    const boxText = document.getElementById('box-text');
-    const boxAnim = document.getElementById('box-anim');
-    const pathAnim = document.getElementById('path-anim'); // Get path animation
-    const boxCircle = document.getElementById('box-circle');
+    // Elements
+    const mainCircle = document.querySelector('.main-circle');
+    const rings = document.querySelectorAll('.ring');
+    const breathText = document.getElementById('breath-text');
+    const cycleCountEl = document.getElementById('cycle-count');
+    const timeRemainingEl = document.getElementById('time-remaining');
+    const playBtn = document.getElementById('main-play-btn');
+    const resetBtn = document.getElementById('reset-btn');
+    const tabs = document.querySelectorAll('.tab-btn');
+    const patternInfo = document.querySelector('.pattern-info');
+    const playIcon = document.querySelector('.play-icon');
+    const pauseIcon = document.querySelector('.pause-icon');
+    const footerText = document.querySelector('.footer-instruction');
 
-    // Audio (Bell)
-    const bellSound = new Audio('bell.mp3');
+    // Audio
+    const bellSound = new Audio('bellcut.mp3');
     bellSound.volume = 0.5;
 
-    function playBell() {
-        bellSound.volume = 0.5; // Reset volume
-        bellSound.currentTime = 0;
-        bellSound.play().catch(e => console.log("Audio play failed:", e));
+    // State
+    let isPlaying = false;
+    let currentPhase = 'ready';
+    let cycles = 0;
+    let phaseTimeLeft = 0;
+    let timerInterval;
+    let phaseTimeout;
 
-        // Start fade out at 800ms
-        setTimeout(() => {
-            const fadeAudio = setInterval(() => {
-                if (bellSound.volume > 0.05) {
-                    bellSound.volume -= 0.05;
-                } else {
-                    clearInterval(fadeAudio);
-                    bellSound.pause();
-                    bellSound.currentTime = 0;
-                    bellSound.volume = 0.5; // Reset for next time
-                }
-            }, 20); // Fade over ~200ms
-        }, 800);
+    // Patterns (durations in ms)
+    const patterns = {
+        relaxing: {
+            name: '4-4-4-4 pattern',
+            steps: [
+                { type: 'inhale', duration: 4000, text: 'Inhale', scale: 1.5 },
+                { type: 'hold', duration: 4000, text: 'Hold', scale: 1.5 },
+                { type: 'exhale', duration: 4000, text: 'Exhale', scale: 1.0 },
+                { type: 'hold', duration: 4000, text: 'Hold', scale: 1.0 }
+            ]
+        },
+        calming: {
+            name: '4-7-8 pattern',
+            steps: [
+                { type: 'inhale', duration: 4000, text: 'Inhale', scale: 1.5 },
+                { type: 'hold', duration: 7000, text: 'Hold', scale: 1.5 },
+                { type: 'exhale', duration: 8000, text: 'Exhale', scale: 1.0 }
+            ]
+        },
+        energizing: {
+            name: '4-2 pattern',
+            steps: [
+                { type: 'inhale', duration: 4000, text: 'Inhale', scale: 1.5 },
+                { type: 'exhale', duration: 2000, text: 'Exhale', scale: 1.0 }
+            ]
+        }
+    };
+
+    let currentPatternKey = 'relaxing';
+    let currentStepIndex = 0;
+
+    // Initialization
+    function init() {
+        setupTabs();
+        setupControls();
+        createStars();
+        resetSession();
     }
 
-    // Music Player Logic (SoundCloud)
-    const iframe = document.getElementById('sc-player');
-    // Wait for SC API to load if not ready, but usually it loads fast.
-    // We assume SC is available globally since we added the script.
-    // However, the script is async. Let's wrap in a check or just init.
-    // Ideally we'd wait for onload, but let's try direct init.
+    function createStars() {
+        const starContainer = document.querySelector('.background-stars');
+        const starCount = 20;
+        const colors = ['#ad8cb9', '#4a9dcd', '#eeaa42', '#6db5a0', '#c86056'];
 
-    let widget;
-    let isPlaying = false;
-    const audioControl = document.getElementById('audio-control');
-    const iconSpan = audioControl.querySelector('.icon');
-    const textSpan = audioControl.querySelector('.text');
+        for (let i = 0; i < starCount; i++) {
+            const svgNS = "http://www.w3.org/2000/svg";
+            const star = document.createElementNS(svgNS, "svg");
+            star.setAttribute("viewBox", "0 0 100 100");
+            star.classList.add("star");
 
-    // Initialize widget when API is ready
-    // We can use a simple interval check or just try.
-    // Since we put the script before this file (or in body), it might race.
-    // Let's use a safe init.
+            const path = document.createElementNS(svgNS, "path");
+            path.setAttribute("d", "M 50 0 C 60 40 100 50 100 50 C 60 60 50 100 50 100 C 40 60 0 50 0 50 C 40 40 50 0 50 0 Z");
 
-    function initWidget() {
-        if (typeof SC !== 'undefined') {
-            widget = SC.Widget(iframe);
-            setupPlayerControls();
-        } else {
-            setTimeout(initWidget, 100);
+            // Random Color
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            path.setAttribute("fill", randomColor);
+            path.setAttribute("opacity", "0.3"); // Base opacity
+
+            star.appendChild(path);
+
+            // Random Properties
+            const size = Math.random() * 30 + 15; // 15px to 45px
+            const top = Math.random() * 100;
+            const left = Math.random() * 100;
+            const delay = Math.random() * 5; // 0s to 5s delay
+
+            star.style.width = `${size}px`;
+            star.style.height = `${size}px`; // Keep aspect ratio
+            star.style.top = `${top}%`;
+            star.style.left = `${left}%`;
+            star.style.animationDelay = `${delay}s`;
+
+            // Avoid center area (roughly) to not overlap main content too much
+            // Center is approx 50% 50%. Let's say we allow it everywhere for now as stars are background
+            // but if we wanted to avoid the very center:
+            // if (top > 30 && top < 70 && left > 30 && left < 70) continue; 
+            // However, low z-index handles overlap visually.
+
+            starContainer.appendChild(star);
         }
     }
 
-    function setupPlayerControls() {
-        // Play/Pause Toggle
+    function setupTabs() {
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                if (isPlaying) stopSession();
+
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+
+                currentPatternKey = tab.getAttribute('data-pattern');
+                patternInfo.textContent = patterns[currentPatternKey].name;
+                resetSession();
+            });
+        });
+    }
+
+    function setupControls() {
+        playBtn.addEventListener('click', togglePlay);
+        resetBtn.addEventListener('click', () => {
+            stopSession();
+            resetSession();
+        });
+    }
+
+    function togglePlay() {
+        if (isPlaying) {
+            resetSession();
+        } else {
+            startSession();
+            footerText.textContent = "Breathe with the circle";
+        }
+    }
+
+    function startSession() {
+        isPlaying = true;
+        playIcon.classList.add('hidden');
+        pauseIcon.classList.remove('hidden');
+
+        if (currentPhase === 'ready') {
+            currentStepIndex = 0;
+            runStep();
+        } else {
+            // Resume logic (simplified: restart current step or just restart cycle)
+            // For simplicity, we restart the current step
+            runStep();
+        }
+    }
+
+    function stopSession() {
+        isPlaying = false;
+        playIcon.classList.remove('hidden');
+        pauseIcon.classList.add('hidden');
+
+        clearTimeout(phaseTimeout);
+        clearInterval(timerInterval);
+
+        // Stop Audio
+        bellSound.pause();
+        bellSound.currentTime = 0;
+
+        // Pause visual
+        const computedStyle = window.getComputedStyle(mainCircle);
+        const currentScale = computedStyle.transform;
+        mainCircle.style.transition = 'none';
+        mainCircle.style.transform = currentScale;
+
+        rings.forEach(ring => {
+            const ringStyle = window.getComputedStyle(ring);
+            const ringTransform = ringStyle.transform;
+            ring.style.transition = 'none';
+            ring.style.transform = ringTransform;
+        });
+    }
+
+    function resetSession() {
+        stopSession();
+        currentPhase = 'ready';
+        cycles = 0;
+        currentStepIndex = 0;
+
+        cycleCountEl.textContent = '0';
+        timeRemainingEl.textContent = '0s';
+        breathText.textContent = 'Ready';
+
+        mainCircle.style.transition = 'transform 0.5s ease';
+        mainCircle.style.transform = 'scale(1)';
+
+        rings.forEach(ring => {
+            ring.style.transition = 'transform 0.5s ease';
+            ring.style.transform = 'translate(-50%, -50%) scale(1)';
+        });
+        footerText.textContent = "Press play to begin";
+    }
+
+    function runStep() {
+        if (!isPlaying) return;
+
+        const pattern = patterns[currentPatternKey];
+        const step = pattern.steps[currentStepIndex];
+
+        // Update State
+        currentPhase = step.type;
+        breathText.textContent = step.text;
+
+        // Visual Style Updates
+        mainCircle.classList.remove('hold', 'exhale');
+
+        if (step.type === 'hold') {
+            mainCircle.classList.add('hold');
+            footerText.textContent = "Hold your breath...";
+        } else if (step.type === 'exhale') {
+            mainCircle.classList.add('exhale');
+            footerText.textContent = "Slowly release...";
+        } else {
+            if (step.type === 'inhale') footerText.textContent = "Breathe in...";
+        }
+
+        // Audio
+        playBell();
+
+        // Visual Animation
+        mainCircle.style.transition = `transform ${step.duration}ms linear`;
+        mainCircle.style.transform = `scale(${step.scale})`;
+
+        rings.forEach(ring => {
+            ring.style.transition = `transform ${step.duration}ms linear`;
+            ring.style.transform = `translate(-50%, -50%) scale(${step.scale})`;
+        });
+
+        // Timer
+        phaseTimeLeft = step.duration / 1000;
+        timeRemainingEl.textContent = `${Math.ceil(phaseTimeLeft)}s`;
+
+        clearInterval(timerInterval);
+        timerInterval = setInterval(() => {
+            phaseTimeLeft -= 1;
+            if (phaseTimeLeft < 0) phaseTimeLeft = 0;
+            timeRemainingEl.textContent = `${Math.ceil(phaseTimeLeft)}s`;
+        }, 1000);
+
+        // Next Step
+        phaseTimeout = setTimeout(() => {
+            currentStepIndex++;
+            if (currentStepIndex >= pattern.steps.length) {
+                currentStepIndex = 0;
+                cycles++;
+                cycleCountEl.textContent = cycles;
+            }
+            runStep();
+        }, step.duration);
+    }
+
+    function playBell() {
+        bellSound.currentTime = 0;
+        bellSound.play().catch(() => { });
+    }
+
+    init();
+
+    // SoundCloud Player Integration
+    // Check if script is already added
+    if (!document.querySelector('script[src="https://w.soundcloud.com/player/api.js"]')) {
+        const scScript = document.createElement('script');
+        scScript.src = 'https://w.soundcloud.com/player/api.js';
+        document.body.appendChild(scScript);
+
+        scScript.onload = initAudioPlayer;
+    } else {
+        initAudioPlayer();
+    }
+
+    function initAudioPlayer() {
+        const iframeElement = document.querySelector('#sc-player');
+        if (!iframeElement) return;
+
+        // Wait for SC to be available if script just loaded
+        if (typeof SC === 'undefined') {
+            setTimeout(initAudioPlayer, 100);
+            return;
+        }
+
+        const widget = SC.Widget(iframeElement);
+        const audioControl = document.getElementById('audio-control');
+        const audioWrapper = document.querySelector('.audio-wrapper');
+
+        if (!audioControl) return;
+
+        const iconSpan = audioControl.querySelector('.icon');
+        const textSpan = audioControl.querySelector('.text');
+        let isPlaying = false;
+
         audioControl.addEventListener('click', () => {
             if (isPlaying) {
                 widget.pause();
                 iconSpan.textContent = '♫';
                 textSpan.textContent = 'Play Music';
+                isPlaying = false;
                 audioControl.classList.remove('playing');
+                if (audioWrapper) audioWrapper.classList.remove('active');
             } else {
                 widget.play();
                 iconSpan.textContent = '❚❚';
                 textSpan.textContent = 'Pause Music';
+                isPlaying = true;
                 audioControl.classList.add('playing');
+                if (audioWrapper) audioWrapper.classList.add('active');
             }
-            isPlaying = !isPlaying;
+        });
+
+        // Ensure loop is active
+        widget.bind(SC.Widget.Events.FINISH, () => {
+            widget.play();
         });
 
         // Song Selection
@@ -102,121 +349,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 textSpan.textContent = 'Pause Music';
                 isPlaying = true;
                 audioControl.classList.add('playing');
+                if (audioWrapper) audioWrapper.classList.add('active');
             });
         });
 
         // Volume Control
         const volumeSlider = document.getElementById('volume-slider');
-        volumeSlider.addEventListener('input', (e) => {
-            const volume = e.target.value;
-            widget.setVolume(volume);
-        });
+        if (volumeSlider) {
+            volumeSlider.addEventListener('input', (e) => {
+                const volume = e.target.value;
+                widget.setVolume(volume);
+            });
+        }
     }
-
-    initWidget();
-
-    const dots = document.querySelectorAll('.dot');
-
-    function resetDots() {
-        dots.forEach(dot => dot.classList.remove('active'));
-    }
-
-    function startDotAnimation() {
-        resetDots();
-        // Light up dots one by one every second
-        dots.forEach((dot, index) => {
-            setTimeout(() => {
-                dot.classList.add('active');
-            }, index * 1000);
-        });
-    }
-
-    // Box Cycle: Inhale (4s), Hold (4s), Exhale (4s), Hold (4s)
-    // Total 16s.
-
-    function runBoxCycle() {
-        // 0-4s: Inhale (Up)
-        playBell();
-        startDotAnimation(); // Start counting
-        boxText.innerText = 'Inhale';
-        boxText.style.opacity = 1; // Fade In
-
-        // Fade out before Hold
-        setTimeout(() => { boxText.style.opacity = 0; }, 3500);
-
-        // 4-8s: Hold (Right) - Maintain Inhale Size
-        setTimeout(() => {
-            playBell();
-            startDotAnimation(); // Start counting
-            boxText.innerText = 'Hold';
-            boxText.style.opacity = 1; // Fade In
-        }, 4000);
-
-        // Fade out before Exhale
-        setTimeout(() => { boxText.style.opacity = 0; }, 7500);
-
-        // 8-12s: Exhale (Down)
-        setTimeout(() => {
-            playBell();
-            startDotAnimation(); // Start counting
-            boxText.innerText = 'Exhale';
-            boxText.style.opacity = 1; // Fade In
-        }, 8000);
-
-        // Fade out before Hold
-        setTimeout(() => { boxText.style.opacity = 0; }, 11500);
-
-        // 12-16s: Hold (Left) - Maintain Exhale Size
-        setTimeout(() => {
-            playBell();
-            startDotAnimation(); // Start counting
-            boxText.innerText = 'Hold';
-            boxText.style.opacity = 1; // Fade In
-        }, 12000);
-
-        // Fade out before loop restarts (Inhale)
-        setTimeout(() => { boxText.style.opacity = 0; }, 15500);
-    }
-
-    // Start Button Logic
-    const startBtn = document.getElementById('start-btn');
-    const startOverlay = document.getElementById('start-overlay');
-
-    // Box circle start (25, 320) - Start of new offset path
-    boxCircle.setAttribute('cx', 25);
-    boxCircle.setAttribute('cy', 320);
-
-    boxText.innerText = 'Get Ready...';
-
-    startBtn.addEventListener('click', () => {
-        // 1. Unlock Audio
-        bellSound.play().then(() => {
-            bellSound.pause();
-            bellSound.currentTime = 0;
-        }).catch(e => console.log("Audio unlock failed:", e));
-
-        // 2. Hide Overlay
-        startOverlay.classList.add('hidden');
-
-        // 3. Start "Get Ready" Countdown (4 seconds)
-        startDotAnimation(); // Visual count 1-4
-
-        // 4. Start Sequence after 4 seconds
-        setTimeout(() => {
-            // Reset circle positions
-            boxCircle.setAttribute('cx', 0);
-            boxCircle.setAttribute('cy', 0);
-
-            // Start SVG Animations
-            boxAnim.beginElement();
-            pathAnim.beginElement(); // Start drawing the box
-
-            // Start Cycles
-            runBoxCycle();
-
-            // Repeat cycles
-            setInterval(runBoxCycle, 16000);      // Box (16s)
-
-        }, 4000); // 4 second "Get Ready"
-    });
 });

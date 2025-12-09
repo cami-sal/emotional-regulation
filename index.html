@@ -4,10 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blooming Scroll</title>
+    <title>Emotional Regulation</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="flower graphs/newgrowth/blueflower.svg">
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -31,9 +32,14 @@
                 <span class="song-title">Scandinavia</span>
                 <span class="song-author">Paul Landry</span>
             </div>
+            <!-- Volume Slider -->
+            <div class="volume-control">
+                <span class="vol-icon">🔊</span>
+                <input type="range" id="volume-slider" min="0" max="100" value="50">
+            </div>
         </div>
     </div>
-    <a href="#step-3" class="skip-btn">Skip to regulation tools</a>
+    <a href="#step-3" class="skip-btn">Go to regulation tools</a>
     <iframe id="sc-player" width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay"
         src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/relaxingmusicok/lost-in-clouds-paul-landry&color=%23ff5500&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=false&loop=true"
         style="display: none;">
@@ -340,8 +346,12 @@
             </header>
 
             <div class="observe-subsection">
-                <h2 class="subsection-title">What am I really feeling?</h2>
+                <h2 class="subsection-title">What am I really feeling?
+                    <span class="korean-text-header">나는 지금 무엇을 정말로 느끼고 있을까요?</span>
+                </h2>
                 <div class="radar-container">
+                    <div class="radar-sweep-gradient"></div>
+                    <div class="radar-pulse-ring"></div>
                     <svg class="radar-svg" viewBox="0 0 400 400">
                         <!-- Concentric circles -->
                         <circle cx="200" cy="200" r="150" class="radar-circle" />
@@ -358,40 +368,64 @@
 
                         <!-- Radar blips (colored spots) -->
                         <!-- 9 Blips total, bigger size (r=15) -->
-                        <circle cx="260" cy="120" r="15" class="radar-blip" />
-                        <circle cx="150" cy="180" r="15" class="radar-blip" />
-                        <circle cx="280" cy="250" r="15" class="radar-blip" />
-                        <circle cx="170" cy="290" r="15" class="radar-blip" />
-                        <circle cx="310" cy="200" r="15" class="radar-blip" />
-                        <circle cx="230" cy="160" r="15" class="radar-blip" />
-                        <circle cx="100" cy="100" r="15" class="radar-blip" />
-                        <circle cx="120" cy="250" r="15" class="radar-blip" />
-                        <circle cx="220" cy="300" r="15" class="radar-blip" />
+
+                        <circle cx="150" cy="180" r="10" class="radar-blip" />
+                        <circle cx="280" cy="250" r="10" class="radar-blip" />
+                        <circle cx="170" cy="290" r="10" class="radar-blip" />
+                        <circle cx="310" cy="200" r="10" class="radar-blip" />
+                        <circle cx="230" cy="160" r="10" class="radar-blip" />
 
                         <!-- Center circle -->
                         <circle cx="200" cy="200" r="8" class="radar-center" />
                     </svg>
                 </div>
-                <p class="fade-text">To regulate our emotions we must understand them first</p>
+                <p class="fade-text">To regulate our emotions we must understand them first
+                    <br><span class="korean-text-large">감정을 조절하기 위해서는 먼저 그 감정을 이해해야 합니다.</span>
+                </p>
             </div>
 
             <div class="observe-subsection-2">
                 <h2 class="subsection-title">Think about something that is currently troubling you<br>or has troubled
-                    you in the past</h2>
+                    you in the past
+                    <span class="korean-text-header">지금 당신을 괴롭히고 있는 일이나 과거에 당신을 힘들게 했던 일을 떠올려 보십시오.</span>
+                </h2>
 
                 <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.8.5/dist/dotlottie-wc.js"
                     type="module"></script>
-                <dotlottie-wc src="https://lottie.host/23ac0a26-4b5b-4df8-a8de-3c6b62ff4d39/fMaODBqBMf.lottie"
-                    style="width: 300px;height: 300px" autoplay loop></dotlottie-wc>
+                <div class="lottie-wrapper"
+                    style="position: relative; display: flex; justify-content: center; align-items: center;">
+                    <dotlottie-wc src="https://lottie.host/23ac0a26-4b5b-4df8-a8de-3c6b62ff4d39/fMaODBqBMf.lottie"
+                        style="width: 300px;height: 300px" autoplay loop></dotlottie-wc>
+
+                    <!-- Subtle Stars -->
+                    <svg class="subtle-star star-1" width="24" height="24" viewBox="0 0 24 24">
+                        <path d="M12 0 L14 10 L24 12 L14 14 L12 24 L10 14 L0 12 L10 10 Z" fill="#ffdb73" />
+                    </svg>
+                    <svg class="subtle-star star-2" width="24" height="24" viewBox="0 0 24 24">
+                        <path d="M12 0 L14 10 L24 12 L14 14 L12 24 L10 14 L0 12 L10 10 Z" fill="#4a9dcd" />
+                    </svg>
+                    <svg class="subtle-star star-3" width="24" height="24" viewBox="0 0 24 24">
+                        <path d="M12 0 L14 10 L24 12 L14 14 L12 24 L10 14 L0 12 L10 10 Z" fill="#e76f51" />
+                    </svg>
+                    <svg class="subtle-star star-4" width="24" height="24" viewBox="0 0 24 24">
+                        <path d="M12 0 L14 10 L24 12 L14 14 L12 24 L10 14 L0 12 L10 10 Z" fill="#2a9d8f" />
+                    </svg>
+                </div>
 
                 <div class="continue-container">
-                    <p class="continue-text">Take a few seconds to think and then continue</p>
+                    <p class="continue-text">Take a few seconds to think and then continue
+                        <br><span class="korean-text-large">몇 초간 생각해 보신 후 Continue하십시오.</span>
+                    </p>
                     <button id="continue-btn" class="continue-btn">Continue</button>
                 </div>
-                <h3 id="emotions-title" class="emotions-title hidden">How does it make you feel?</h3>
+                <h3 id="emotions-title" class="emotions-title hidden">How does it make you feel?
+                    <span class="korean-text-header">그것이 당신에게 어떤 기분을 느끼게 합니까?</span>
+                </h3>
                 <div id="emotions-grid" class="emotions-grid hidden"></div>
-                <h2 id="emotions-footer" class="subsection-title hidden" style="margin-top: 4rem; font-size: 2rem;">Once
-                    we name our emotions,<br>we begin to truly feel them</h2>
+                <h2 id="emotions-footer" class="subsection-title hidden" style="margin-top: 4rem; font-size: 3rem;">Once
+                    we name our emotions,<br>we begin to truly feel them
+                    <span class="korean-text-header">감정에 이름을 붙이는 순간, 우리는 비로소 그 감정을 온전히 느끼기 시작합니다.</span>
+                </h2>
 
             </div>
         </section>
@@ -401,11 +435,15 @@
             <header class="step-header">
                 <h1>Step 2: Validate</h1>
             </header>
-            <h2 class="subsection-title">Don’t judge the emotion, embrace it</h2>
+            <h2 class="subsection-title">Don’t judge the emotion, embrace it
+                <span class="korean-text-header">그 감정을 판단하지 말고, 그대로 받아들여 주십시오.</span>
+            </h2>
             <div class="pipes-container">
                 <canvas id="pipes-canvas"></canvas>
             </div>
-            <p class="signals-text">Emotions are signals that point you in the right direction</p>
+            <p class="signals-text">Emotions are signals that point you in the right direction
+                <br><span class="korean-text-large">감정은 당신이 가야 할 방향을 알려주는 중요한 신호입니다.</span>
+            </p>
         </section>
 
         <!-- Step 3 Section -->
@@ -413,7 +451,11 @@
             <header class="step-header">
                 <h1>Step 3: Regulate</h1>
             </header>
-            <h2 class="subsection-title">Now that you named the emotion,<br>let's calm things down</h2>
+            <h2 class="subsection-title">Now that you named the emotion and validated it,<br>let's calm things down, in
+                other words, regulate it.
+                <span class="korean-text-header">이제 그 감정에 이름을 붙이고 인정했으니, 조금씩 그 감정을 가라앉혀 보겠습니다.<br> 다시 말해, 그 감정을 조절해
+                    보겠습니다.</span>
+            </h2>
             <div class="regulate-options">
                 <a href="breathing.html" class="regulate-btn" id="btn-breathing"
                     style="text-decoration: none; display: inline-block;">Breathing Meditation</a>
@@ -427,64 +469,122 @@
             <header class="step-header">
                 <h1>Step 4: Integrate</h1>
             </header>
-            <h2 class="subsection-title">Choose the right strategy for you,<br>and try to turn it into a habit</h2>
+            <h2 class="subsection-title">Choose the right strategy for you,<br>and turn it into a habit
+                <span class="korean-text-header">당신에게 맞는 전략을 선택하고, 그것을 습관으로 만들어 보십시오.</span>
+            </h2>
 
             <div class="integration-diagram">
                 <!-- Row 1 -->
-                <div class="integration-row">
-                    <div class="visual-bar connected">
-                        <div class="block grey"></div>
-                        <div class="block red long"></div>
+                <div class="integration-row" id="integration-row-1">
+                    <div class="visual-bar separated" id="interactive-visual-bar" style="position: relative;">
+                        <div class="block grey" id="draggable-block"></div>
+                        <div id="drag-road"
+                            style="position: absolute; left: 0; top: 0; height: 100%; width: 60px; background-color: #c86056; opacity: 0; z-index: 1;">
+                        </div>
+                        <div class="block red short" id="target-block"></div>
                     </div>
-                    <p class="integration-text">At first, we can have big emotional reactions</p>
+                    <p class="integration-text">At first, we can have big emotional reactions<br>
+                        <span class="korean-text">처음에는 감정이 크게 흔들릴 수 있습니다.</span>
+                    </p>
                 </div>
 
                 <!-- Row 2 -->
-                <div class="integration-row">
-                    <div class="visual-bar separated">
-                        <div class="block grey"></div>
-                        <div class="block red short"></div>
+                <div class="integration-row" id="integration-row-2">
+                    <div class="visual-bar separated" id="interactive-visual-bar-2" style="position: relative;">
+                        <div class="block grey" id="draggable-block-2"></div>
+                        <div id="drag-road-2"
+                            style="position: absolute; left: 0; top: 0; height: 100%; width: 60px; background-color: #c86056; opacity: 0; z-index: 1;">
+                        </div>
+                        <div class="block red short" id="target-block-2"></div>
                     </div>
-                    <p class="integration-text">If we learn to stop, pause and breathe</p>
+                    <p class="integration-text">If we learn to stop, pause and breathe<br>
+                        <span class="korean-text">멈추고, 잠시 쉬고, 숨을 고르는 법을 배우면</span>
+                    </p>
                 </div>
 
                 <!-- Row 3 -->
-                <div class="integration-row">
-                    <div class="visual-bar separated">
-                        <div class="block grey"></div>
-                        <div class="block blue short"></div>
+                <div class="integration-row" id="integration-row-3">
+                    <div class="visual-bar separated" id="interactive-visual-bar-3" style="position: relative;">
+                        <!-- Initial Red Road (Pause) -->
+                        <div id="drag-road-3-initial"
+                            style="position: absolute; left: 0; top: 0; height: 100%; width: 60px; background-color: #c86056; opacity: 0.4; z-index: 1;">
+                        </div>
+                        <div class="block grey" id="draggable-block-3"></div>
+                        <div class="block red short" id="target-block-3"></div>
                     </div>
-                    <p class="integration-text">We can choose a different response</p>
+                    <p class="integration-text">We can choose a different response<br>
+                        <span class="korean-text">우리는 다른 반응을 선택할 수 있습니다.</span>
+                    </p>
                 </div>
 
                 <!-- Row 4 -->
-                <div class="integration-row">
-                    <div class="visual-bar connected">
-                        <div class="block grey"></div>
-                        <div class="block blue long"></div>
+                <div class="integration-row" id="integration-row-4">
+                    <div class="visual-bar separated" id="interactive-visual-bar-4" style="position: relative;">
+                        <div class="block grey" id="draggable-block-4"></div>
+                        <div id="drag-road-4"
+                            style="position: absolute; left: 0; top: 0; height: 100%; width: 60px; background-color: #4a9dcd; opacity: 0; z-index: 1;">
+                        </div>
+                        <div class="block blue short" id="target-block-4"></div>
                     </div>
-                    <p class="integration-text">And with time, it will become our new instinct</p>
+                    <p class="integration-text">And with time, it will become our new instinct<br>
+                        <span class="korean-text">그리고 시간이 지나면, 그것이 우리의 새로운 본능이 됩니다.</span>
+                    </p>
                 </div>
             </div>
 
-            <div class="finish-container">
-                <p class="dont-give-up-text">Don't give up</p>
-            </div>
+
         </section>
 
         <!-- Final Message Section -->
         <section id="final-message">
+            <header class="step-header">
+                <h1>Step 5: Don't Give Up</h1>
+            </header>
             <div class="snake-container">
                 <canvas id="snake-canvas"></canvas>
                 <div class="snake-text-container">
-                    <p class="snake-text">today you will feel many feelings</p>
-                    <p class="snake-text">notice them</p>
-                    <p class="snake-text">be curious about them</p>
-                    <p class="snake-text">seek the wisdom in them</p>
-                    <p class="snake-text">treat them with kindness</p>
-                    <p class="snake-text">remember they are temporary</p>
+                    <p class="snake-text">In your life, you will feel many feelings.<span class="korean-text">당신의
+                            삶에서는 정말 많은 감정을 느끼게 될 것입니다.</span></p>
+                    <p class="snake-text">Notice them.<span class="korean-text">그 감정들을 알아차리십시오.</span></p>
+                    <p class="snake-text">Be curious about them.<span class="korean-text">그 감정들에 호기심을 가져 보십시오.</span>
+                    </p>
+                    <p class="snake-text">Seek the wisdom in them.<span class="korean-text">그 안에 담긴 지혜를 찾아보십시오.</span>
+                    </p>
+                    <p class="snake-text">Treat them with kindness.<span class="korean-text">그 감정들을 다정하게 대해 주십시오.</span>
+                    </p>
+                    <p class="snake-text">And remember they are temporary.<span class="korean-text">그리고 그것들이 잠시 머물다 지나가는
+                            것임을 기억하십시오.</span></p>
                 </div>
             </div>
+        </section>
+
+        <!-- New Section -->
+        <section id="conclusion-section"
+            style="min-height: 100vh; background-color: #faf9f5; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; z-index: 20; overflow: hidden;">
+            <header class="step-header conclusion-header" style="z-index: 2; text-align: center;">
+                <h1>Your journey is yours only.<br> Make sure to enjoy it.
+                    <span class="korean-text-header"
+                        style="white-space: normal; line-height: 1.6; margin-top: 2rem; font-size: 1.5rem;">당신의 여정은 오직
+                        당신만의 것입니다.<br>그러니 그 여정을 마음껏 즐기십시오.</span>
+                </h1>
+            </header>
+
+            <!-- Floating Decorations -->
+            <!-- Blue Flowers -->
+            <img src="flower graphs/newgrowth/blueflower.svg" class="floating-decoration float-flower-1" alt="Flower">
+            <img src="flower graphs/newgrowth/blueflower.svg" class="floating-decoration float-flower-2" alt="Flower">
+            <img src="flower graphs/newgrowth/blueflower.svg" class="floating-decoration float-flower-3" alt="Flower">
+
+            <!-- Petals (Leaves) -->
+            <img src="flower graphs/newgrowth/darkgreenleaf.svg" class="floating-decoration float-petal-1" alt="Petal">
+            <img src="flower graphs/newgrowth/lightgreenleaf.svg" class="floating-decoration float-petal-2" alt="Petal">
+            <img src="flower graphs/newgrowth/pinkleaf.svg" class="floating-decoration float-petal-3" alt="Petal">
+
+            <!-- Circles -->
+            <div class="floating-decoration float-circle-1"></div>
+            <div class="floating-decoration float-circle-2"></div>
+            <div class="floating-decoration float-circle-3"></div>
+            <div class="floating-decoration float-circle-4"></div>
         </section>
 
     </div>

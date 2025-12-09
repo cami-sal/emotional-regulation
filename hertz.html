@@ -17,24 +17,44 @@
         <span class="arrow">←</span> Go Back
     </a>
 
-    <!-- Start Overlay -->
-    <div id="start-overlay">
-        <div class="overlay-content">
-            <button id="start-btn">Start Frequency</button>
-        </div>
-    </div>
+
 
     <!-- Page Transition Overlay (Starts active for fade-in effect) -->
     <div id="page-transition-overlay" class="active"></div>
 
     <div class="hertz-container">
-        <h1>Hertz Frequencies</h1>
+        <h1>Hertz Frequencies
+            <span class="info-trigger">?
+                <span class="info-tooltip">
+                    Sound frequencies like 396 Hz can influence brainwave activity, shifting the mind from a state of
+                    anxiety to relaxation. This helps in releasing subconscious fear and guilt, facilitating emotional
+                    grounding and balance.
+                    <br><br>
+                    <span class="korean-text">
+                        396Hz와 같은 음향 주파수는 뇌파 활동에 영향을 주어, 불안한 마음을 이완된 상태로 변화시킵니다. 이는 잠재의식 속의 두려움과 죄책감을 덜어내어 정서적 안정과 균형을
+                        찾는 데 도움을 줍니다.
+                    </span>
+                </span>
+            </span>
+        </h1>
         <h2>396 Hz — Anxiety Release</h2>
 
         <!-- Audio Controls -->
         <div class="hertz-controls">
             <button id="play-btn" class="control-btn">&#9658;</button>
             <button id="pause-btn" class="control-btn">&#10074;&#10074;</button>
+        </div>
+
+        <!-- Timer Controls -->
+        <div class="timer-section">
+            <div class="timer-buttons">
+                <span class="timer-label">Set Timer:</span>
+                <button class="timer-btn" data-time="10">10m</button>
+                <button class="timer-btn" data-time="15">15m</button>
+                <button class="timer-btn" data-time="20">20m</button>
+            </div>
+            <div id="timer-display" class="timer-display hidden">00:00</div>
+            <button id="cancel-timer" class="cancel-timer-btn hidden">✕</button>
         </div>
 
         <!-- Water Drop Animations (Multiple Sources) -->
@@ -58,11 +78,16 @@
         // Page Transition Logic
         document.addEventListener('DOMContentLoaded', () => {
             const overlay = document.getElementById('page-transition-overlay');
-            const startOverlay = document.getElementById('start-overlay');
-            const startBtn = document.getElementById('start-btn');
             const playBtn = document.getElementById('play-btn');
             const pauseBtn = document.getElementById('pause-btn');
             const waterContainers = document.querySelectorAll('.water-animation');
+
+            // Timer Elements
+            const timerButtons = document.querySelectorAll('.timer-btn');
+            const timerDisplay = document.getElementById('timer-display');
+            const cancelTimerBtn = document.getElementById('cancel-timer');
+            let timerInterval;
+
             let widget;
             let rippleIntervals = [];
 
@@ -123,14 +148,6 @@
                 rippleIntervals = [];
             }
 
-            // Start Button (Unlock Audio & Play)
-            startBtn.addEventListener('click', () => {
-                startOverlay.classList.add('hidden');
-                if (widget) {
-                    widget.play();
-                    startRipples();
-                }
-            });
 
             // Play/Pause Controls
             playBtn.addEventListener('click', () => {
@@ -146,6 +163,59 @@
                     stopRipples();
                 }
             });
+
+            // Timer Logic
+            timerButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const minutes = parseInt(btn.getAttribute('data-time'));
+                    startTimer(minutes);
+
+                    // Auto play if not playing
+                    if (widget) {
+                        widget.play();
+                        startRipples();
+                    }
+                });
+            });
+
+            cancelTimerBtn.addEventListener('click', stopTimer);
+
+            function startTimer(minutes) {
+                clearInterval(timerInterval);
+                let seconds = minutes * 60;
+
+                updateDisplay(seconds);
+                timerDisplay.classList.remove('hidden');
+                cancelTimerBtn.classList.remove('hidden');
+
+                timerInterval = setInterval(() => {
+                    seconds--;
+                    updateDisplay(seconds);
+
+                    if (seconds <= 0) {
+                        clearInterval(timerInterval);
+                        stopTimer(); // Reset UI
+
+                        // Stop Session
+                        if (widget) {
+                            widget.pause();
+                            stopRipples();
+                        }
+                    }
+                }, 1000);
+            }
+
+            function stopTimer() {
+                clearInterval(timerInterval);
+                timerDisplay.classList.add('hidden');
+                cancelTimerBtn.classList.add('hidden');
+            }
+
+            function updateDisplay(totalSeconds) {
+                const m = Math.floor(totalSeconds / 60);
+                const s = totalSeconds % 60;
+                timerDisplay.textContent = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+            }
 
             // Handle Back Button
             const backBtn = document.querySelector('.back-btn');

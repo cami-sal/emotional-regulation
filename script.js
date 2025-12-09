@@ -269,7 +269,8 @@ document.addEventListener('DOMContentLoaded', () => {
             { selector: '#regulation-practice', offset: 0.7 },
             { selector: '#practice-emotions', offset: 0.7 },
             { selector: '#how-it-works', offset: 0.7 },
-            { selector: '#step-observe', offset: 0.7 }
+            { selector: '#step-observe', offset: 0.7 },
+            { selector: '.observe-subsection-2', offset: 0.7 }
         ];
 
         sections.forEach(({ selector, offset }) => {
@@ -855,13 +856,19 @@ document.addEventListener('DOMContentLoaded', () => {
     // Radar Logic
     function initRadar() {
         const blips = document.querySelectorAll('.radar-blip');
+        const radarSvg = document.querySelector('.radar-svg');
         const centerX = 200;
         const centerY = 200;
         const sweepDuration = 4; // Seconds (must match CSS)
 
+        // Remove existing pings if any (cleanup)
+        const existingPings = document.querySelectorAll('.radar-ping');
+        existingPings.forEach(p => p.remove());
+
         blips.forEach(blip => {
             const cx = parseFloat(blip.getAttribute('cx'));
             const cy = parseFloat(blip.getAttribute('cy'));
+            const r = parseFloat(blip.getAttribute('r'));
             const dx = cx - centerX;
             const dy = cy - centerY;
             let theta = Math.atan2(dy, dx);
@@ -869,7 +876,24 @@ document.addEventListener('DOMContentLoaded', () => {
             let cssDegrees = degrees + 90;
             if (cssDegrees < 0) cssDegrees += 360;
             const delay = (cssDegrees / 360) * sweepDuration;
+
+            // Set delay for blip
             blip.style.animationDelay = `${delay}s`;
+
+            // Get blip color
+            const blipColor = window.getComputedStyle(blip).fill;
+
+            // Create Ping Element
+            const ping = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+            ping.setAttribute("cx", cx);
+            ping.setAttribute("cy", cy);
+            ping.setAttribute("r", r);
+            ping.classList.add("radar-ping");
+            ping.style.animationDelay = `${delay}s`;
+            ping.style.stroke = blipColor; // Match color
+
+            // Append to SVG
+            if (radarSvg) radarSvg.appendChild(ping);
         });
     }
 
@@ -986,6 +1010,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const widget = SC.Widget(iframeElement);
         const audioControl = document.getElementById('audio-control');
+        const audioWrapper = document.querySelector('.audio-wrapper'); // Get wrapper
 
         if (!audioControl) return;
 
@@ -1000,12 +1025,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 textSpan.textContent = 'Play Music';
                 isPlaying = false;
                 audioControl.classList.remove('playing');
+                if (audioWrapper) audioWrapper.classList.remove('active'); // Hide songs
             } else {
                 widget.play();
                 iconSpan.textContent = '❚❚';
                 textSpan.textContent = 'Pause Music';
                 isPlaying = true;
                 audioControl.classList.add('playing');
+                if (audioWrapper) audioWrapper.classList.add('active'); // Show songs
             }
         });
 
@@ -1043,8 +1070,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 textSpan.textContent = 'Pause Music';
                 isPlaying = true;
                 audioControl.classList.add('playing');
+                if (audioWrapper) audioWrapper.classList.add('active'); // Ensure songs are shown
             });
         });
+
+        // Volume Control
+        const volumeSlider = document.getElementById('volume-slider');
+        if (volumeSlider) {
+            volumeSlider.addEventListener('input', (e) => {
+                const volume = e.target.value;
+                widget.setVolume(volume);
+            });
+        }
     }
     // Pipes Animation for Step 2 (Thin lines)
     function initPipes() {
@@ -1348,6 +1385,8 @@ document.addEventListener('DOMContentLoaded', () => {
         animate();
     }
 
+
+
     // Play button scroll functionality
     const playBtn = document.querySelector('.hero-play-btn');
     if (playBtn) {
@@ -1359,7 +1398,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    initPipes();
+    // Volume Control Logic (Global or inside initWidget)
+    // We need to ensure widget is defined.
+    // Let's find where widget is defined.
+    // initWidget(); -> Removed because it is undefined and crashes the script
 
     // Snake Animation for Final Message
     function initSnake() {
@@ -1367,14 +1409,43 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!canvas) return;
         const ctx = canvas.getContext('2d');
 
-        // Colors from the website theme
-        const colors = [
-            'rgba(255, 219, 115, 0.8)', // #ffdb73 Yellow
-            'rgba(74, 157, 205, 0.8)',  // #4a9dcd Blue
-            'rgba(200, 96, 86, 0.8)',   // #c86056 Red
-            'rgba(109, 181, 160, 0.8)', // #6db5a0 Green
-            'rgba(173, 136, 185, 0.8)'  // #ad88b9 Purple
+        // Define color groups by tones (Increased opacity)
+        const yellowOrange = [
+            'rgba(255, 219, 115, 0.8)', // Theme Yellow
+            'rgba(255, 235, 175, 0.8)', // Light Yellow
+            'rgba(255, 200, 120, 0.8)'  // Warm Orange-Yellow
         ];
+
+        const blueGreen = [
+            'rgba(74, 157, 205, 0.8)',  // Theme Blue
+            'rgba(109, 181, 160, 0.8)', // Theme Green
+            'rgba(130, 200, 240, 0.8)', // Light Blue
+            'rgba(150, 210, 190, 0.8)'  // Light Green
+        ];
+
+        const redPurple = [
+            'rgba(200, 96, 86, 0.8)',   // Theme Red
+            'rgba(173, 136, 185, 0.8)', // Theme Purple
+            'rgba(235, 130, 120, 0.8)', // Light Red
+            'rgba(200, 170, 215, 0.8)'  // Light Purple
+        ];
+
+        const pinks = [
+            'rgba(255, 192, 203, 0.8)', // Pink
+            'rgba(255, 182, 193, 0.8)', // Light Pink
+            'rgba(209, 109, 194, 0.8)'  // Hot Pink
+        ];
+
+        // Combine groups in random order to create "sections" of tones
+        const groups = [yellowOrange, blueGreen, redPurple, pinks];
+        // Simple shuffle of the groups
+        for (let i = groups.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [groups[i], groups[j]] = [groups[j], groups[i]];
+        }
+
+        // Flatten into single colors array
+        const colors = groups.flat();
 
         function resize() {
             // Set canvas size to match container
@@ -1384,25 +1455,32 @@ document.addEventListener('DOMContentLoaded', () => {
             drawSnake();
         }
 
-        function drawSnake() {
+        let points = [];
+        const circleRadius = 25;
+        let animationProgress = 0;
+        let isAnimating = false;
+        let hasAnimated = false;
+
+        // Track hover state and current scale for smooth animation
+        let circleScales = [];
+        let hoveredCircleIndex = -1;
+        let circleColorOffsets = [];
+
+        function calculatePoints() {
             const width = canvas.width;
             const height = canvas.height;
-            ctx.clearRect(0, 0, width, height);
-
-            const circleRadius = 25;
             const spacing = 30;
             const rows = 6;
             const rowHeight = height / rows;
             const margin = 100;
 
-            // Define path segments
             let segments = [];
+            points = [];
 
             for (let i = 0; i < rows; i++) {
                 const y = i * rowHeight + rowHeight / 2;
                 const isRight = i % 2 === 0;
 
-                // Straight line segment
                 const startX = isRight ? margin : width - margin;
                 const endX = isRight ? width - margin : margin;
 
@@ -1413,21 +1491,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     length: Math.abs(endX - startX)
                 });
 
-                // Curve segment (if not last row)
                 if (i < rows - 1) {
                     const nextY = (i + 1) * rowHeight + rowHeight / 2;
                     const cx = isRight ? width - margin : margin;
                     const cy = (y + nextY) / 2;
                     const radius = (nextY - y) / 2;
-
-                    // Right curve: -PI/2 to PI/2
-                    // Left curve: 3PI/2 to PI/2 (decreasing)
                     const startAngle = isRight ? -Math.PI / 2 : 1.5 * Math.PI;
                     const endAngle = isRight ? Math.PI / 2 : 0.5 * Math.PI;
-                    const isCounterClockwise = !isRight; // Left curve goes 270 -> 90 (down via left) which is CCW? 
-                    // Wait. 270 (Top) -> 90 (Bottom). 
-                    // 270 is 3PI/2. 90 is PI/2.
-                    // CCW: 270 -> 180 -> 90. Yes.
 
                     segments.push({
                         type: 'arc',
@@ -1436,66 +1506,27 @@ document.addEventListener('DOMContentLoaded', () => {
                         radius: radius,
                         startAngle: startAngle,
                         endAngle: endAngle,
-                        isCCW: !isRight,
                         length: Math.PI * radius
                     });
                 }
             }
 
-            // Walk the path
             let totalLength = segments.reduce((acc, seg) => acc + seg.length, 0);
-            let currentDist = 0;
-            let points = [];
 
-            // We want points at intervals of 'spacing'
-            // We can iterate through segments
-
-            let distanceCovered = 0;
-
-            segments.forEach(seg => {
-                // How many points fit in this segment starting from current offset?
-                // We need to track "distance into current segment" vs "global distance"
-                // Actually, just step along.
-
-                // But simpler: just walk the segment.
-                // We need to carry over remainder from previous segment?
-                // Yes, to ensure perfect spacing.
-
-                // Let's just generate points for the segment based on global steps?
-                // No, that's hard.
-                // Let's just walk.
-            });
-
-            // Better approach:
-            // Iterate d from 0 to totalLength step spacing
             for (let d = 0; d <= totalLength; d += spacing) {
-                // Find which segment contains d
                 let localD = d;
                 for (let seg of segments) {
                     if (localD <= seg.length) {
-                        // Point is in this segment at localD
                         if (seg.type === 'line') {
-                            // Interpolate line
                             const t = localD / seg.length;
                             points.push({
                                 x: seg.start.x + (seg.end.x - seg.start.x) * t,
                                 y: seg.start.y + (seg.end.y - seg.start.y) * t
                             });
                         } else {
-                            // Interpolate arc
-                            // Angle interpolation
-                            // If CCW, angle decreases? Or we handle logic.
-                            // startAngle to endAngle.
-                            // If isCCW, we might need to handle wrap around?
-                            // My angles: Right: -PI/2 to PI/2. Diff PI.
-                            // Left: 3PI/2 to PI/2. Diff -PI.
-
                             const totalAngle = seg.endAngle - seg.startAngle;
-                            // Check wrap? No, defined simply.
-
                             const t = localD / seg.length;
                             const currentAngle = seg.startAngle + totalAngle * t;
-
                             points.push({
                                 x: seg.cx + seg.radius * Math.cos(currentAngle),
                                 y: seg.cy + seg.radius * Math.sin(currentAngle)
@@ -1508,16 +1539,173 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            // Draw circles
-            points.forEach((p, index) => {
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, circleRadius, 0, Math.PI * 2);
-                ctx.fillStyle = colors[index % colors.length];
-                ctx.fill();
+            // Re-initialize scales and colors if points count changes
+            circleScales = new Array(points.length).fill(1);
+            if (circleColorOffsets.length !== points.length) {
+                circleColorOffsets = new Array(points.length).fill(0);
+            }
+        }
+
+        function drawSnake() {
+            if (points.length === 0) calculatePoints();
+
+            const width = canvas.width;
+            const height = canvas.height;
+            ctx.clearRect(0, 0, width, height);
+
+            let needsRedraw = false;
+
+            if (isAnimating) {
+                animationProgress += 0.0009; // Animation speed (Even Slower than Slower)
+                if (animationProgress > 1) {
+                    animationProgress = 1;
+                    isAnimating = false;
+                }
+                needsRedraw = true;
+            } else if (!hasAnimated) {
+                return; // Draw nothing until visible
+            } else {
+                animationProgress = 1; // Ensure full visibility if finished
+            }
+
+            // Update scales based on hover
+            points.forEach((_, index) => {
+                const targetScale = (index === hoveredCircleIndex) ? 1.3 : 1;
+                const diff = targetScale - circleScales[index];
+
+                if (Math.abs(diff) > 0.01) {
+                    circleScales[index] += diff * 0.1; // Smooth ease
+                    needsRedraw = true;
+                } else {
+                    circleScales[index] = targetScale;
+                }
             });
+
+            points.forEach((p, index) => {
+                const threshold = index / points.length;
+                // Fade in logic based on animationProgress
+                let circleOpacity = (animationProgress - threshold) * 8;
+
+                if (circleOpacity < 0) circleOpacity = 0;
+                if (circleOpacity > 1) circleOpacity = 1;
+
+                if (circleOpacity > 0.01) {
+                    ctx.beginPath();
+                    const scale = circleScales[index] || 1;
+                    ctx.arc(p.x, p.y, circleRadius * scale, 0, Math.PI * 2);
+
+                    const offset = circleColorOffsets[index] || 0;
+                    const colorIndex = (index + offset) % colors.length;
+                    const baseColor = colors[colorIndex];
+
+                    const rgbaMatch = baseColor.match(/rgba\((\d+),\s*(\d+),\s*(\d+),\s*([\d.]+)\)/);
+                    if (rgbaMatch) {
+                        const [_, r, g, b, a] = rgbaMatch;
+                        const finalAlpha = parseFloat(a) * circleOpacity;
+                        ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${finalAlpha})`;
+                    } else {
+                        ctx.fillStyle = baseColor;
+                    }
+                    ctx.fill();
+                }
+            });
+
+            if (needsRedraw) {
+                requestAnimationFrame(drawSnake);
+            }
+        }
+
+        function resize() {
+            const container = canvas.parentElement;
+            canvas.width = container.offsetWidth;
+            canvas.height = container.offsetHeight;
+            calculatePoints();
+            drawSnake();
         }
 
         window.addEventListener('resize', resize);
+
+        // Mouse Move for Hover Effect
+        canvas.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+
+            let foundIndex = -1;
+
+            // Check collision
+            for (let i = 0; i < points.length; i++) {
+                const p = points[i];
+                const dx = mouseX - p.x;
+                const dy = mouseY - p.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+
+                // Use slightly larger radius for easier hovering
+                if (distance <= circleRadius * 1.5) {
+                    foundIndex = i;
+                    break;
+                }
+            }
+
+            if (hoveredCircleIndex !== foundIndex) {
+                hoveredCircleIndex = foundIndex;
+                drawSnake(); // Trigger updates
+            }
+        });
+
+        // Click to change color
+        canvas.addEventListener('click', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+
+            for (let i = 0; i < points.length; i++) {
+                const p = points[i];
+                const dx = mouseX - p.x;
+                const dy = mouseY - p.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+
+                if (distance <= circleRadius * 1.5) {
+                    // Increment color offset
+                    // Add a random step to make it feel more "change" than just next in sequence
+                    circleColorOffsets[i] = (circleColorOffsets[i] || 0) + Math.floor(Math.random() * 5) + 1;
+                    drawSnake();
+                    break;
+                }
+            }
+        });
+
+        // Clear hover on leave
+
+        // Clear hover on leave
+        canvas.addEventListener('mouseleave', () => {
+            if (hoveredCircleIndex !== -1) {
+                hoveredCircleIndex = -1;
+                drawSnake();
+            }
+        });
+
+        // Trigger animation when valid section comes into view
+        const observer = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting && !hasAnimated) {
+                hasAnimated = true;
+                isAnimating = true;
+                drawSnake();
+
+                // Animate text elements with stagger
+                const textElements = document.querySelectorAll('.snake-text');
+                textElements.forEach((el, index) => {
+                    setTimeout(() => {
+                        el.classList.add('visible');
+                    }, index * 1800 + 1000); // Start after 1s, stagger by 1.8s
+                });
+            }
+        }, { threshold: 0.1 }); // Start when 10% visible
+
+        const container = document.getElementById('final-message');
+        if (container) observer.observe(container);
+
+        // Initial setup
         resize();
     }
 
@@ -1530,4 +1718,511 @@ document.addEventListener('DOMContentLoaded', () => {
             card.classList.toggle('flipped');
         });
     });
+
+    // Integrated Block Drag Interaction
+    const dragBlock = document.getElementById('draggable-block');
+    const targetBlock = document.getElementById('target-block');
+    const dragRoad = document.getElementById('drag-road');
+    const interactiveContainer = document.getElementById('interactive-visual-bar');
+
+    if (dragBlock && targetBlock && dragRoad && interactiveContainer) {
+        let isDragging = false;
+        let startX;
+        let initialRoadWidth = 60; // Initial width of the grey block
+
+        // Touch support
+        const getClientX = (e) => {
+            return e.touches ? e.touches[0].clientX : e.clientX;
+        };
+
+        const startDrag = (e) => {
+            isDragging = true;
+            startX = getClientX(e);
+
+            // Disable transition during drag
+            dragBlock.style.transition = 'none';
+            dragRoad.style.transition = 'none';
+        };
+
+        const moveDrag = (e) => {
+            if (!isDragging) return;
+            e.preventDefault(); // Prevent scrolling on touch
+
+            const currentX = getClientX(e);
+            const deltaX = currentX - startX;
+
+            // Calculate limits
+            // Left limit: 0
+            // Right limit: Distance to target block
+            // We can calculate this dynamically based on container width
+            const containerRect = interactiveContainer.getBoundingClientRect();
+            const blockRect = dragBlock.getBoundingClientRect();
+            const targetRect = targetBlock.getBoundingClientRect();
+
+            // Max delta?
+            // The block starts at left: 0 (roughly).
+            // Max movement is until it hits the target.
+            // Distance = targetRect.left - blockRect.left (initial)
+            // But blockRect.left changes. We need initial positions.
+            // Since we use transform, deltaX is relative to start.
+
+            // Safe max distance calculation:
+            // The empty space + target width? No, just empty space.
+            // Or rather, we want to align the RIGHT edge of dragged block to RIGHT edge of Target?
+            // "until the red square".
+            // Let's assume we want to touch the red square.
+
+            // Calculate max available width for translation
+            // Total width - block width - target width - padding?
+            // Easier: just ensure we don't go past the target's left edge.
+
+            // Since we don't have stored initial positions, let's rely on the visual bar width.
+            // Visual bar is width 100% of parent 600px.
+            // Block is 60px. Target is 60px.
+            // Max translate = containerWidth - 60 - 60?
+
+            // Max update: Allow dragging comfortably over the target to ensure the snap feels natural when "occupying" the place.
+            // Original: containerRect.width - blockRect.width - targetRect.width;
+            // New: containerRect.width - blockRect.width (allow going to end of container minus block size)
+            const maxTranslate = containerRect.width - blockRect.width;
+
+            // Clamping
+            let translate = Math.max(0, Math.min(deltaX, maxTranslate));
+
+            // Apply transform
+            dragBlock.style.transform = `translateX(${translate}px)`;
+
+            // Update Road
+            // The road forms "behind" it.
+            // It starts at Left:0.
+            // Its width should cover the initial block position (60px) + the translation.
+            // So width = 60 + translate.
+
+            dragRoad.style.width = `${initialRoadWidth + translate}px`;
+
+            // Opacity: 0 to 1 based on progress
+            // Progress = translate / maxTranslate
+            const progress = Math.min(translate / maxTranslate, 1);
+            dragRoad.style.opacity = progress;
+        };
+
+        const endDrag = () => {
+            if (!isDragging) return;
+            isDragging = false;
+
+            // Check if we are close enough to snap to end
+            // Get current transform
+            const style = window.getComputedStyle(dragBlock);
+            const matrix = new WebKitCSSMatrix(style.transform);
+            const currentTranslate = matrix.m41;
+
+            const containerRect = interactiveContainer.getBoundingClientRect();
+            const blockRect = dragBlock.getBoundingClientRect(); // Current rect
+            // We need maxTranslate again.
+            // Target is at the end. Target width 60.
+            // Max translate is roughly containerWidth - 120.
+            const maxTranslate = containerRect.width - 60 - 60; // 60 for block, 60 for target
+
+            const progress = currentTranslate / maxTranslate;
+
+            // Re-enable transitions for snapping
+            dragBlock.style.transition = 'transform 0.3s ease';
+            dragRoad.style.transition = 'width 0.3s ease, opacity 0.3s ease';
+
+            if (progress > 0.8) {
+                // Snap to end - Cover the red target
+                // We add targetWidth (60) to the maxTranslate so it overlaps fully
+                const fullOverlapTranslate = maxTranslate + 60;
+                dragBlock.style.transform = `translateX(${fullOverlapTranslate}px)`;
+
+                // Road should extend to the START of the overlap
+                // Road width = initialRoadWidth + maxTranslate (same as before, stopping at the red block's start edge)
+                // Actually, if blue covers red, the road should stop where blue USED to stop (before overlap)?
+                // "red road forms behind it".
+                // If blue moves ON TOP of red, the road connects from start to the blue block's new position.
+                // New road width = initialRoadWidth + fullOverlapTranslate.
+                // But wait, the user said "blue square to ocupy the place of the red on in the end".
+                // So the road effectively replaces the gap + the blue block's travel.
+
+                dragRoad.style.width = `${initialRoadWidth + fullOverlapTranslate}px`;
+                dragRoad.style.opacity = '1';
+
+                // Trigger Row 2 Fade In
+                const row2 = document.getElementById('integration-row-2');
+                if (row2) row2.classList.add('visible');
+            } else {
+                // Snap back to start
+                dragBlock.style.transform = `translateX(0px)`;
+                dragRoad.style.width = `${initialRoadWidth}px`;
+                dragRoad.style.opacity = '0';
+            }
+        };
+
+        dragBlock.addEventListener('mousedown', startDrag);
+        document.addEventListener('mousemove', moveDrag);
+        document.addEventListener('mouseup', endDrag);
+
+
+        dragBlock.addEventListener('touchstart', startDrag);
+        document.addEventListener('touchmove', moveDrag);
+        document.addEventListener('touchend', endDrag);
+    }
+
+    // Integrated Block Drag Interaction - Row 2 (Middle Stop)
+    const dragBlock2 = document.getElementById('draggable-block-2');
+    const targetBlock2 = document.getElementById('target-block-2');
+    const dragRoad2 = document.getElementById('drag-road-2');
+    const interactiveContainer2 = document.getElementById('interactive-visual-bar-2');
+
+    if (dragBlock2 && targetBlock2 && dragRoad2 && interactiveContainer2) {
+        let isDragging = false;
+        let startX;
+        let initialRoadWidth = 60;
+
+        const getClientX = (e) => {
+            return e.touches ? e.touches[0].clientX : e.clientX;
+        };
+
+        const startDrag = (e) => {
+            isDragging = true;
+            startX = getClientX(e);
+            dragBlock2.style.transition = 'none';
+            dragRoad2.style.transition = 'none';
+        };
+
+        // We want to stop at the middle.
+        // Middle = Halfway to the target.
+        // We still allow dragging, but maybe we provide visual feedback?
+        // Or we just calculate the snap point.
+
+        const moveDrag = (e) => {
+            if (!isDragging) return;
+            e.preventDefault();
+
+            const currentX = getClientX(e);
+            const deltaX = currentX - startX;
+
+            const containerRect = interactiveContainer2.getBoundingClientRect();
+            const blockRect = dragBlock2.getBoundingClientRect();
+
+            // Allow dragging full width
+            const maxTranslate = containerRect.width - blockRect.width;
+
+            let translate = Math.max(0, Math.min(deltaX, maxTranslate));
+
+            dragBlock2.style.transform = `translateX(${translate}px)`;
+            dragRoad2.style.width = `${initialRoadWidth + translate}px`;
+
+            // Opacity: 0 to 0.4
+            const progress = Math.min(translate / maxTranslate, 1);
+            dragRoad2.style.opacity = progress * 0.4;
+        };
+
+        const endDrag = () => {
+            if (!isDragging) return;
+            isDragging = false;
+
+            const style = window.getComputedStyle(dragBlock2);
+            const matrix = new WebKitCSSMatrix(style.transform);
+            const currentTranslate = matrix.m41;
+
+            const containerRect = interactiveContainer2.getBoundingClientRect();
+            // Calculate Middle Point
+            // Total available distance is width - 60 - 60.
+            // Wait, we allowed dragging past target in row 1.
+            // But visually, the "space" is between start blocks.
+            // Target is at right.
+            // We want to stop "at the middle of the trayectory".
+            // Let's define trajectory as Start to Target.
+            // Target Left = Width - 60. Start Right = 60.
+            // Distance = Width - 120.
+            // Midpoint Translate = Distance / 2 = (Width - 120) / 2.
+
+            const maxDistance = containerRect.width - 120; // Distance between blocks
+            const middleTranslate = maxDistance / 2;
+
+            // Snap Threshold: If dragged past 25%, go to middle. 
+            // If dragged past 75%, go to end? width 
+            // User: "stop at the middle of the trayectory".
+            // Usually this implies the *goal* is the middle.
+
+            // Re-enable transitions
+            dragBlock2.style.transition = 'transform 0.3s ease';
+            dragRoad2.style.transition = 'width 0.3s ease, opacity 0.3s ease';
+
+            // Check progress relative to middle
+            // If > 20% of the way to middle, snap to middle.
+            if (currentTranslate > middleTranslate * 0.4) {
+                // Snap to Middle
+                dragBlock2.style.transform = `translateX(${middleTranslate}px)`;
+                dragRoad2.style.width = `${initialRoadWidth + middleTranslate}px`;
+                dragRoad2.style.opacity = '0.4';
+
+                // Trigger Row 3 Fade In
+                const row3 = document.getElementById('integration-row-3');
+                if (row3) {
+                    row3.classList.add('visible');
+                    // Re-run initialization to ensure correct positioning just in case
+                    if (typeof initRow3 === 'function') initRow3();
+                }
+
+                // Maybe change road color or style to indicate "Pause"?
+                // Leaving as red road for now as requested ("do the same... behind it")
+            } else {
+                // Snap back to start
+                dragBlock2.style.transform = `translateX(0px)`;
+                dragRoad2.style.width = `${initialRoadWidth}px`;
+                dragRoad2.style.opacity = '0';
+            }
+        };
+
+        dragBlock2.addEventListener('mousedown', startDrag);
+        document.addEventListener('mousemove', moveDrag);
+        document.addEventListener('mouseup', endDrag);
+
+        dragBlock2.addEventListener('touchstart', startDrag);
+        document.addEventListener('touchmove', moveDrag);
+        document.addEventListener('touchend', endDrag);
+    }
+
+
+    // Integrated Block Drag Interaction - Row 3 (Start from Middle)
+    // Initialize position and road
+    // Integrated Block Drag Interaction - Row 3 (Start from Middle)
+    const container3 = document.getElementById('interactive-visual-bar-3');
+    const block3 = document.getElementById('draggable-block-3');
+    const road3Initial = document.getElementById('drag-road-3-initial');
+    const targetBlock3 = document.getElementById('target-block-3');
+
+    if (container3 && block3 && road3Initial && targetBlock3) {
+        let isDragging = false;
+        let startX;
+        let initialRoadWidth = 60;
+
+        const getClientX = (e) => (e.touches ? e.touches[0].clientX : e.clientX);
+
+        const updateTargetColor = (progress) => {
+            // progress: 0 (Middle/Red) -> 1 (Start/Blue)
+            // Red: 200, 96, 86
+            // Blue: 74, 157, 205
+            const r = Math.round(200 + (74 - 200) * progress);
+            const g = Math.round(96 + (157 - 96) * progress);
+            const b = Math.round(86 + (205 - 86) * progress);
+            targetBlock3.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
+        };
+
+        const setInitialState = () => {
+            if (isDragging) return;
+            const containerRect = container3.getBoundingClientRect();
+            const maxDistance = containerRect.width - 120; // 60 for block, 60 for target
+            const middleTranslate = maxDistance / 2;
+
+            block3.style.transform = `translateX(${middleTranslate}px)`;
+            road3Initial.style.width = `${initialRoadWidth + middleTranslate}px`;
+            // Ensure target is initially red (progress 0)
+            updateTargetColor(0);
+        };
+
+        const startDrag = (e) => {
+            isDragging = true;
+            startX = getClientX(e);
+
+            block3.style.transition = 'none';
+            road3Initial.style.transition = 'none';
+            targetBlock3.style.transition = 'none';
+
+            // Store start translate
+            const style = window.getComputedStyle(block3);
+            const matrix = new WebKitCSSMatrix(style.transform);
+            block3.dataset.startTranslate = matrix.m41;
+        };
+
+        const moveDrag = (e) => {
+            if (!isDragging) return;
+            e.preventDefault();
+
+            const currentX = getClientX(e);
+            const deltaX = currentX - startX;
+            const startTranslate = parseFloat(block3.dataset.startTranslate || 0);
+
+            const containerRect = container3.getBoundingClientRect();
+            const maxDistance = containerRect.width - 120;
+            const middleTranslate = maxDistance / 2;
+
+            // Allow dragging: 0 <= translate <= middleTranslate (restrict going further right)
+            let newTranslate = Math.max(0, Math.min(startTranslate + deltaX, middleTranslate));
+
+            block3.style.transform = `translateX(${newTranslate}px)`;
+            road3Initial.style.width = `${initialRoadWidth + newTranslate}px`;
+
+            // Calculate progress for color change (1 when back at 0, 0 when at middle)
+            const progress = (middleTranslate - newTranslate) / middleTranslate;
+            updateTargetColor(progress);
+        };
+
+        const endDrag = () => {
+            if (!isDragging) return;
+            isDragging = false;
+
+            const style = window.getComputedStyle(block3);
+            const matrix = new WebKitCSSMatrix(style.transform);
+            const currentTranslate = matrix.m41;
+
+            const containerRect = container3.getBoundingClientRect();
+            const maxDistance = containerRect.width - 120;
+            const middleTranslate = maxDistance / 2;
+
+            block3.style.transition = 'transform 0.3s ease';
+            road3Initial.style.transition = 'width 0.3s ease';
+            targetBlock3.style.transition = 'background-color 0.3s ease';
+
+            // Snap logic: If closer to start, snap to Start. Else snap back to Middle.
+            if (currentTranslate < middleTranslate * 0.5) {
+                // Snap to Start
+                block3.style.transform = `translateX(0px)`;
+                road3Initial.style.width = `${initialRoadWidth}px`;
+                updateTargetColor(1); // Blue
+
+                // Trigger Row 4 Fade In
+                const row4 = document.getElementById('integration-row-4');
+                if (row4) row4.classList.add('visible');
+            } else {
+                // Return to Middle
+                block3.style.transform = `translateX(${middleTranslate}px)`;
+                road3Initial.style.width = `${initialRoadWidth + middleTranslate}px`;
+                updateTargetColor(0); // Red
+            }
+        };
+
+        block3.addEventListener('mousedown', startDrag);
+        document.addEventListener('mousemove', moveDrag);
+        document.addEventListener('mouseup', endDrag);
+
+        block3.addEventListener('touchstart', startDrag);
+        document.addEventListener('touchmove', moveDrag);
+        document.addEventListener('touchend', endDrag);
+
+        // Initialize
+        setInitialState();
+        window.addEventListener('resize', setInitialState);
+    }
+
+    // Integrated Block Drag Interaction - Row 4 (Blue Road to End)
+    const dragBlock4 = document.getElementById('draggable-block-4');
+    const targetBlock4 = document.getElementById('target-block-4');
+    const dragRoad4 = document.getElementById('drag-road-4');
+    const interactiveContainer4 = document.getElementById('interactive-visual-bar-4');
+
+    if (dragBlock4 && targetBlock4 && dragRoad4 && interactiveContainer4) {
+        let isDragging = false;
+        let startX;
+        let initialRoadWidth = 60;
+
+        const getClientX = (e) => (e.touches ? e.touches[0].clientX : e.clientX);
+
+        const startDrag = (e) => {
+            isDragging = true;
+            startX = getClientX(e);
+            dragBlock4.style.transition = 'none';
+            dragRoad4.style.transition = 'none';
+        };
+
+        const moveDrag = (e) => {
+            if (!isDragging) return;
+            e.preventDefault();
+
+            const currentX = getClientX(e);
+            const deltaX = currentX - startX;
+
+            const containerRect = interactiveContainer4.getBoundingClientRect();
+            const blockRect = dragBlock4.getBoundingClientRect();
+
+            // Allow dragging over target
+            const maxTranslate = containerRect.width - blockRect.width;
+
+            let translate = Math.max(0, Math.min(deltaX, maxTranslate));
+
+            dragBlock4.style.transform = `translateX(${translate}px)`;
+
+            // Road Logic (Blue)
+            dragRoad4.style.width = `${initialRoadWidth + translate}px`;
+
+            // Opacity: 0 to 1
+            const progress = Math.min(translate / maxTranslate, 1);
+            dragRoad4.style.opacity = progress;
+        };
+
+        const endDrag = () => {
+            if (!isDragging) return;
+            isDragging = false;
+
+            const style = window.getComputedStyle(dragBlock4);
+            const matrix = new WebKitCSSMatrix(style.transform);
+            const currentTranslate = matrix.m41;
+
+            const containerRect = interactiveContainer4.getBoundingClientRect();
+            // Max translate + overlap
+            const maxTranslate = containerRect.width - 60 - 60; // Up to target start
+            // But we want to allow overlap like Row 1 to cover target
+            // Target is "long" (flex-grow), so its width is dynamic? 
+            // In CSS: .block.long { flex-grow: 1; }
+            // If it's flex-grow, its width depends on container.
+            // Wait, Row 1 target was .short (60px). Row 4 target is .long.
+            // Let's check visual dimensions.
+            // Container width 600px (max-width).
+            // Block grey: 60px.
+            // Target blue long takes remaining space?
+            // "visual-bar connected" -> display: flex.
+            // .block.grey width 60px. .block.long flex-grow 1 -> takes rest.
+
+            // If target takes the rest of the space, "dragging to end" means dragging to the right edge.
+            // But if we want the blue square to "occupy the place", does it mean drag all the way?
+            // Or just connect?
+            // "MAKE THE LAST ROW BE THE SAME AS THE FIRST ONE"
+            // Row 1: Drag blue (grey) square to red square. Red square was short (60px).
+            // Here, target is long.
+            // If I drag the grey square, it should leave a blue trail.
+            // If I snap to end, it should cover the target?
+            // Or just connect to it?
+            // Row 1 snaps to cover.
+            // Since target is long, covering it implies the block stays at the far end?
+            // Or maybe the user means "connect essentially".
+            // Let's try to snap to the START of the target first, or end?
+            // "follows ... when you move it".
+            // Let's allow dragging to the very end of the container.
+
+            const fullContainerWidth = containerRect.width;
+            const blockWidth = 60;
+            const maxDragDistance = fullContainerWidth - blockWidth;
+
+            // Snap logic: if > 50% across container?
+            const progress = currentTranslate / maxDragDistance;
+
+            dragBlock4.style.transition = 'transform 0.3s ease';
+            dragRoad4.style.transition = 'width 0.3s ease, opacity 0.3s ease';
+
+            if (progress > 0.8) {
+                // Snap to END (Full overlap)
+                dragBlock4.style.transform = `translateX(${maxDragDistance}px)`;
+                dragRoad4.style.width = `${fullContainerWidth}px`; // Full width road
+                dragRoad4.style.opacity = '1';
+                // Note: The road is "behind" the block. If road width == fullContainerWidth, it covers everything.
+                // Since block is on top (dom order or z-index?), block is visible.
+                // Road is z-index 1. Block is z-index 10.
+            } else {
+                // Snap back
+                dragBlock4.style.transform = `translateX(0px)`;
+                dragRoad4.style.width = `${initialRoadWidth}px`;
+                dragRoad4.style.opacity = '0';
+            }
+        };
+
+        dragBlock4.addEventListener('mousedown', startDrag);
+        document.addEventListener('mousemove', moveDrag);
+        document.addEventListener('mouseup', endDrag);
+
+        dragBlock4.addEventListener('touchstart', startDrag);
+        document.addEventListener('touchmove', moveDrag);
+        document.addEventListener('touchend', endDrag);
+    }
 });

@@ -1082,6 +1082,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 widget.setVolume(volume);
             });
         }
+
+        // Close Button Logic (New)
+        const closeBtn = document.querySelector('.close-music-btn');
+        if (closeBtn && audioWrapper) {
+            closeBtn.addEventListener('click', (e) => {
+                e.stopPropagation(); // Prevent bubbling to audioControl if nested (though it isn't, safer)
+                audioWrapper.classList.remove('active');
+            });
+        }
     }
     // Pipes Animation for Step 2 (Thin lines)
     function initPipes() {

@@ -1709,6 +1709,7 @@ document.addEventListener('DOMContentLoaded', () => {
         resize();
     }
 
+    initPipes();
     initSnake();
 
     // Flip Card Interaction
